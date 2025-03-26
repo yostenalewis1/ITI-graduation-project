@@ -9,7 +9,7 @@ import offerCard2 from '../assets/offer-2.png'
 import offerCard3 from '../assets/offer-3.png'
 
 const offerData = [
-   { 
+{ 
       title : "Rose Bouquet",
       description : "A delicate arrangement of soft pink roses, perfect for romantic gestures and celebrations.",
       price : 500.00,
@@ -91,29 +91,29 @@ const offerData = [
 
 <!-- Deal Of The Day -->
 
-<div class="bg-[url('../assets/about-us-cover.png')] bg-cover bg-center h-[620px] flex flex-col items-center gap-10">
+<div class="bg-[url('../assets/about-us-cover.png')] bg-cover bg-center h-auto pb-10 flex flex-col items-center gap-10">
         <div class="w-[715px] h-16 text-center text-purple-950 text-4xl font-bold font-cairo z-10 pt-[30px]">Deal Of The Day</div>
         <p class="text-purple-950 font-cairo text-3xl">Limited Offer – Grab Yours Now</p>
        
-      <div class="flex flex-row gap-3">
-          <div class="w-28 p-2 outline outline-[3px] outline-offset-[-3px] outline-stone-500 inline-flex flex-col justify-center items-center gap-2">
+      <div class="flex flex-row gap-3 w-96">
+          <div class="w-28 p-2 outline outline-[2px] outline-offset-[-2px] outline-stone-500 inline-flex flex-col justify-center items-center gap-2">
                      <div class="self-stretch text-center justify-start"><span class="text-violet-950  text-4xl font-normal font-['Inter']">50<br/></span><span class="text-violet-950 text-3xl font-light font-cairo">Days</span></div>
           </div>
 
-         <div class="w-28 p-2 outline outline-[3px] outline-offset-[-3px] outline-stone-500 inline-flex flex-col justify-center items-center gap-2.5">
+         <div class="w-28 p-2 outline outline-[2px] outline-offset-[-2px] outline-stone-500 inline-flex flex-col justify-center items-center gap-2.5">
              <div class="self-stretch text-center justify-start"><span class="text-violet-950  text-4xl font-normal font-cairo">23<br/></span><span class="text-violet-950 text-3xl font-light font-cairo">Hours</span></div>
         </div>
 
-        <div class="w-28 p-2 outline outline-[3px] outline-offset-[-3px] outline-stone-500 inline-flex flex-col justify-center items-center gap-2.5">
+        <div class="w-28 p-2 outline outline-[2px] outline-offset-[-2px] outline-stone-500 inline-flex flex-col justify-center items-center gap-2.5">
             <div class="self-stretch text-center justify-start"><span class="text-violet-950  text-4xl font-normal font-cairo">95<br/></span><span class="text-violet-950 text-3xl font-light font-cairo">Mins</span></div>
         </div>
 
-        <div class="w-28 p-2 outline outline-[3px] outline-offset-[-3px] outline-stone-500 inline-flex flex-col justify-center items-center gap-2.5">
+        <div class="w-28 p-2 outline outline-[2px] outline-offset-[-2px] outline-stone-500 inline-flex flex-col justify-center items-center gap-2.5">
             <div class="self-stretch text-center justify-start"><span class="text-violet-950  text-4xl font-normal font-cairo">15<br/></span><span class="text-violet-950 text-3xl font-light font-cairo"> Sec</span></div>
         </div>
       </div>
  
-    <div class="flex flex-row flex-wrap items-center justify-center gap-4">
+    <div class="flex flex-row flex-wrap items-center justify-center gap-4 ">
        <OffersCard 
         v-for="(card , index) in offerData"
         :key="index"

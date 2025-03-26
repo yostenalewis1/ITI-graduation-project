@@ -4,8 +4,10 @@
 
 
    <div class="flex flex-row w-full items-center h-[150px] bg-[url('../assets/bg-featuresCategory.png')] bg-cover bg-center justify-between gap-10 px-20 py-7">    
-    <img src="../assets/footer-logo.png" alt="footer-logo">
-
+    
+ <div class="flex flex-row gap-2 items-center"> 
+  <img src="../assets/footer-logo.png" alt="footer-logo" class="w-20 h-16">
+   
        <div class="flex flex-col gap-2">
          <h1 class="text-indigo-950 text-2xl font-semibold font-cairo">Rozato</h1>
          <p class="text-indigo-950 ">Your trusted flower boutique</p>
@@ -15,7 +17,7 @@
              <button><img src="../assets/twitter.svg"></button>
          </div>
        </div>
-
+   </div>
        <div class="flex flex-col gap-2">
          <h1 class="text-indigo-950 text-2xl font-semibold font-cairo">Contact Us</h1>
          <p class="text-indigo-950 ">+010-151-5114</p>
@@ -41,7 +43,7 @@
 
 
    <div class="h-10 w-full py-4 bg-indigo-950 inline-flex justify-center items-center gap-2">
-    <p class=" text-white   font-cairo">Rozato copyright 2025</p>
+    <p class=" text-white font-cairo">Rozato copyright 2025</p>
    </div>
 </div>
 </template>
