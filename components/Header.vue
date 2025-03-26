@@ -1,3 +1,8 @@
+<script setup>
+import signup from '~/pages/Signup.vue';
+ const showSignUp = ref(false);
+</script>
+
 <template>
     <header class="absolute  w-full bg-transparent text-white px-10 py-4 z-50">
         <div class="container mx-auto flex justify-between items-center">
@@ -16,8 +21,20 @@
                <nuxt-link class="w-6 h-6 "><img src="~/assets/Vector.svg"></nuxt-link>
                <nuxt-link class="w-6 h-6 "><img src="~/assets/Vector (1).svg"></nuxt-link>
                <nuxt-link class="w-6 h-6 "><img src="~/assets/Vector (3).svg"></nuxt-link>
-               <nuxt-link to="/login" class="w-6 h-6 "><img src="~/assets/Vector (4).svg"></nuxt-link>
+                <button @click="showSignUp = true" class="w-6 h-6">
+                  <img src="~/assets/Vector (4).svg" />
+                </button>
             </div>
         </div>
+
+
+        <div v-if="showSignUp" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <signup :showSignUp="showSignUp" @close="showSignUp = false" />
+        </div>
     </header>
+
+  
+
+
+
 </template>
