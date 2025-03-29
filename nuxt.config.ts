@@ -2,7 +2,16 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui'],
+  modules: [
+    "@nuxt/ui",
+    "@vee-validate/nuxt",
+    "nuxt-toastify"
+  ],
+  toastify: {
+    autoClose: 2000,
+    position: 'bottom-right',
+    theme: "auto",
+  },
   css: ['~/assets/tailwind.css'],
   
   app: {
@@ -14,5 +23,6 @@ export default defineNuxtConfig({
         }
       ]
     }
-  }
+  },
+ 
 })
