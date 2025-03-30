@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
     "nuxt-toastify"
   ],
+ 
   toastify: {
     autoClose: 2000,
     position: 'bottom-right',

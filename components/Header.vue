@@ -31,7 +31,9 @@ const switchToSignup = () => {
 watch([showSignUp, showLogin], ([signup, login]) => {
   document.body.style.overflow = (signup || login) ? 'hidden' : 'auto';
 });
+ 
 </script>
+  
 
 <template>
   <header class="absolute w-full bg-transparent text-white px-10 py-4 z-50">

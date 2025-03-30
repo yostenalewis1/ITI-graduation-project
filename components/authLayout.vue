@@ -2,13 +2,15 @@
 
 defineProps({
     title : String,
+    reverse : Boolean,
 })
 
 </script>
 
 <template>
- 
-    <div class="relative w-[40%]">
+  <div :class="['flex w-full' , reverse ? 'flex-row-reverse' : 'flex-row']">
+
+     <div class="relative w-[40%]">
       <img src="../assets/bg-signup.png" alt="bg-signup" class="w-full h-full object-cover rounded-s-2xl" />
       <div class="absolute inset-0 bg-gray-600 bg-opacity-60 flex flex-col justify-center items-center gap-6">
         <p class="text-center text-white text-5xl font-normal font-cairo">Welcome <br />to</p>
@@ -23,4 +25,6 @@ defineProps({
       <div class="text-white text-5xl font-normal font-cairo">{{title}}</div>
       <slot />
     </div> 
+  </div>
+   
 </template>
