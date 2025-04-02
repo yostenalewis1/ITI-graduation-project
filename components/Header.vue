@@ -43,7 +43,15 @@ watch([showSignUp, showLogin], ([signup, login]) => {
       <div to="/" class="text-2xl font-bold text-white">
         <img src="~/assets/Logo.png" alt="logo" />
       </div>
-      <nav class="flex gap-[20px]">
+
+     <button class="sm:hidden focus:outline-none" >
+       <img src="../assets//burger-bar.png" alt="burger-bar" class="w-8 h-8 invert"  />
+     </button>
+
+
+
+
+      <nav class="hidden md:flex gap-[20px]">
         <nuxt-link to="/" class="text-xl font-bold text-center font-cairo ">Home</nuxt-link>
         <nuxt-link to="/" class="w-28 text-center text-xl font-normal font-cairo ">Product</nuxt-link>
         <nuxt-link to="/" class="w-28 text-center text-xl font-normal font-cairo ">Category</nuxt-link>
@@ -61,7 +69,7 @@ watch([showSignUp, showLogin], ([signup, login]) => {
              </div> -->
 
 
-      <div class="w-auto flex justify-between items-center">
+      <div class="w-auto hidden md:flex justify-between items-center">
         <button @click="switchToSignup" class="border rounded-xl p-2 px-3 ml-2 bg-white text-indigo-950">Signup</button>
         <button @click="switchToLogin" class="border rounded-xl p-2 ml-2 px-3 ">Login</button>
       </div>
