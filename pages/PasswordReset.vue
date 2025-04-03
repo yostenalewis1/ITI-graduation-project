@@ -25,7 +25,7 @@ const switchToLogin = () => {
     setNewPassword.value = false;
     
 };
-</script>
+</script> 
 
 
 
@@ -34,17 +34,17 @@ const switchToLogin = () => {
  <div class="bg-[#8C6E82] flex flex-row rounded-t-2xl rounded-e-2xl w-[1400px] h-[596px] overflow-hidden relative">
     <button @click="emit('close')" class="absolute top-2 right-5 text-white text-4xl z-10">&times;</button>
   
-    <form  @submit="onSubmit" class="flex flex-col gap-5 w-[60%] items-start justify-center pl-10">
+    <form  @submit="onSubmit" class="flex flex-col gap-5 w-full md:w-[60%] items-center md:items-start justify-center -mt-10 md:mt-0 md:pl-10 text-center md:text-left">
        <div class="text-white text-5xl font-normal font-cairo">Password reset</div> 
         <div class="flex flex-col gap-5 w-[70%]">
-                <p class="font-cairo text-md">We sent code to your email</p>
-               <PinInput v-model="value" />
+                <p class="font-cairo text-lg md:text-md">We sent code to your email</p>
+               <PinInput v-model="value" class="text-center" />
                <Button type="submit" buttonName="Send e-mail"/>
-                <p>  Didn’t receive the email?<button type="button" class="underline">Click to resend</button></p>
+                <p class="">  Didn’t receive the email?<button type="button" class="underline">Click to resend</button></p>
         </div>
     </form>  
   
-    <div class="relative w-[40%] overflow-hidden">
+    <div class="hidden md:block relative w-[40%] overflow-hidden">
         <img src="../assets/bg-signup.png" alt="bg-signup" class="w-full h-full object-cover " />
         <div class="rounded-e-2xl absolute inset-0 bg-gray-600 bg-opacity-60 flex flex-col justify-center items-center gap-6">
             <p class="text-center text-white text-5xl font-normal font-cairo">Welcome <br />to</p>

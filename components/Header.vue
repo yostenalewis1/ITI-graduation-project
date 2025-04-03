@@ -9,6 +9,7 @@ const route = useRoute();
 
 const showSignUp = ref(false);
 const showLogin = ref(false);
+const showMenu = ref(false); 
 
 const closeModel = () => {
   showSignUp.value = false;
@@ -28,50 +29,49 @@ const switchToSignup = () => {
   router.push({ query: { auth: 'signup' } });  
 };
 
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value;
+};
+
 watch([showSignUp, showLogin], ([signup, login]) => {
   document.body.style.overflow = (signup || login) ? 'hidden' : 'auto';
 });
- 
 </script>
-  
 
 <template>
-<header 
-    class="absolute w-full bg-transparent text-white px-10 py-4 z-50">    
-  
-  <div class="container mx-auto flex justify-between items-center text-indigo-950"    :class="{ 'text-white': route.path === '/' }" >
+  <header class="absolute w-full bg-transparent text-white px-10 py-4 z-50">
+    <div class="container mx-auto flex justify-between items-center text-indigo-950"
+         :class="{ 'text-white': route.path === '/' }">
       <div to="/" class="text-2xl font-bold text-white">
         <img src="~/assets/Logo.png" alt="logo" />
       </div>
 
-     <button class="sm:hidden focus:outline-none" >
-       <img src="../assets//burger-bar.png" alt="burger-bar" class="w-8 h-8 invert"  />
-     </button>
+      
+      <button class="sm:hidden focus:outline-none" @click="toggleMenu">
+        <img src="../assets/burger-bar.png" alt="burger-bar" class="w-8 h-8 invert" />
+      </button>
 
-
-
+      <div v-if="showMenu" class="absolute top-16 left-0 w-full bg-white text-indigo-950 p-5 flex flex-col items-center gap-4 md:hidden">
+        <nuxt-link @click="toggleMenu" to="/" class="text-xl font-bold text-center font-cairo">Home</nuxt-link>
+        <nuxt-link  @click="toggleMenu" to="/" class="w-28 text-center text-xl font-normal font-cairo">Product</nuxt-link>
+        <nuxt-link @click="toggleMenu" to="/" class="w-28 text-center text-xl font-normal font-cairo">Category</nuxt-link>
+        <nuxt-link @click="toggleMenu" to="/" class="w-28 text-center text-xl font-normal font-cairo">About</nuxt-link>
+        <nuxt-link  @click="toggleMenu" to="/ContactUs" class="w-40 text-center text-xl font-normal font-cairo">Contact-Us</nuxt-link>
+        <button @click="switchToSignup(); toggleMenu()" class="border rounded-xl p-2 px-3 ml-2 bg-white text-indigo-950">Signup</button>
+        <button @click="switchToLogin(); toggleMenu()" class="border rounded-xl p-2 ml-2 px-3">Login</button>
+      </div>
 
       <nav class="hidden md:flex gap-[20px]">
-        <nuxt-link to="/" class="text-xl font-bold text-center font-cairo ">Home</nuxt-link>
-        <nuxt-link to="/" class="w-28 text-center text-xl font-normal font-cairo ">Product</nuxt-link>
-        <nuxt-link to="/" class="w-28 text-center text-xl font-normal font-cairo ">Category</nuxt-link>
-        <nuxt-link to="/" class="w-28 text-center text-xl font-normal font-cairo ">About</nuxt-link>
-        <nuxt-link to="/ContactUs" class="w-40 text-center text-xl font-normal font-cairo ">Contact-Us</nuxt-link>
+        <nuxt-link to="/" class="text-xl font-bold text-center font-cairo">Home</nuxt-link>
+        <nuxt-link to="/" class="w-28 text-center text-xl font-normal font-cairo">Product</nuxt-link>
+        <nuxt-link to="/" class="w-28 text-center text-xl font-normal font-cairo">Category</nuxt-link>
+        <nuxt-link to="/" class="w-28 text-center text-xl font-normal font-cairo">About</nuxt-link>
+        <nuxt-link to="/ContactUs" class="w-40 text-center text-xl font-normal font-cairo">Contact-Us</nuxt-link>
       </nav>
-
-
-
-      <!-- <div class="w-40 inline-flex justify-between items-end">
-                <nuxt-link class="w-6 h-6 "><img src="~/assets/Vector.svg"></nuxt-link>
-                <nuxt-link class="w-6 h-6 "><img src="~/assets/Vector (1).svg"></nuxt-link>
-                <nuxt-link class="w-6 h-6 "><img src="~/assets/Vector (3).svg"></nuxt-link>
-                <nuxt-link to="/login" class="w-6 h-6 "><img src="~/assets/Vector (4).svg"></nuxt-link>
-             </div> -->
-
 
       <div class="w-auto hidden md:flex justify-between items-center">
         <button @click="switchToSignup" class="border rounded-xl p-2 px-3 ml-2 bg-white text-indigo-950">Signup</button>
-        <button @click="switchToLogin" class="border rounded-xl p-2 ml-2 px-3 ">Login</button>
+        <button @click="switchToLogin" class="border rounded-xl p-2 ml-2 px-3">Login</button>
       </div>
     </div>
 
@@ -83,4 +83,4 @@ watch([showSignUp, showLogin], ([signup, login]) => {
       <login @close="closeModel" @switch-to-signup="switchToSignup" />
     </div>
   </header>
-</template> 
+</template>

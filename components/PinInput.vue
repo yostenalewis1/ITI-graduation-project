@@ -34,7 +34,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex gap-4">
+  <div class="flex gap-4 justify-center md:justify-start ">
     <input
       v-for="(digit, index) in pin"
       :key="index"
