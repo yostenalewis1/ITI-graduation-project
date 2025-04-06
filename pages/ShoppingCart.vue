@@ -6,7 +6,7 @@ import img2 from '../assets/flower2.png'
 
 <template>
       <div class="w-full top-28 relative flex flex-col-reverse md:flex-row gap-5 mb-40 px-10 justify-center items-stretch">
-        <div class="bg-[url('../assets/about-us-cover.png')] bg-cover bg-center w-full md:w-[75%] border border-indigo-800 rounded-lg ">
+        <div class="bg-[url('../assets/about-us-cover.png')] bg-cover bg-center w-full md:w-[75%] border-2 border-indigo-800 rounded-lg ">
             <div class="flex justify-between px-10 items-center mt-3">
                 <h1 class="text-indigo-950 text-2xl font-bold">Shopping Cart</h1>
                 <p class="text-indigo-950 text-sm ">Price</p>
@@ -63,11 +63,13 @@ import img2 from '../assets/flower2.png'
                 <p class="text-indigo-950 text-xl  font-cairo">1120.00 EGP</p>
             </div>
              
+   
+       <NuxtLink to="/CheckoutPage">         
             <button class="bg-violet-950 w-[90%] mx-auto h-[50px] rounded-lg text-white font-bold font-cairo  mb-5 items-center text-center ">
                 Proceed to buy
             </button>
+        </NuxtLink>
         </div>
-
   
      </div>
         
