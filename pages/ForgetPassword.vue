@@ -2,7 +2,7 @@
  import {useForm , useField} from "vee-validate";
  import * as yup from "yup";
  import PasswordReset from "../pages/PasswordReset.vue"
-  import { useRouter, useRoute } from "vue-router";
+ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 

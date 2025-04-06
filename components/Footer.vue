@@ -3,7 +3,7 @@
 <div class="flex flex-col z-10   md:rounded-none rounded-t-[40px] overflow-hidden ">
 
 
-   <div class=" md:flex flex-row w-full items-center h-[150px] bg-[url('../assets/bg-featuresCategory.png')] bg-cover bg-center justify-between gap-10 px-20 py-7">    
+   <div class=" md:flex flex-row w-full items-center bg-[url('../assets/bg-featuresCategory.png')] bg-cover bg-center justify-between gap-10 px-20 py-7">    
     
       <div class="flex flex-col md:flex-row gap-2 items-center justify-center "> 
          <img src="../assets/footer-logo.png" alt="footer-logo" class="w-20 h-16">

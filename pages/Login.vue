@@ -5,7 +5,7 @@ import {useForm , useField} from "vee-validate";
 
 import ForgetPassword from './ForgetPassword.vue';
 const showForgetPassword = ref(false);
-const emit = defineEmits(['close', 'switch-to-signup']);
+const emit = defineEmits(['close', 'switch-to-signup','login-success']);
 
 
 const closeModal = () => {
@@ -37,6 +37,7 @@ const { value: password } = useField('password');
 
 const onSubmit = handleSubmit((values) => {
   console.log(values);
+  emit('login-success')
 });
 
 </script>
