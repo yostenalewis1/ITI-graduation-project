@@ -45,7 +45,7 @@ const offerData = [
           Fresh Flowers for Any Occasion 
        </div>
 
-        <div class=" text-teal-50  text-[22px] md:text-[28px] text-center md:text-left font-light font-cairo w-[90%] md:w-[850px] leading-[40px] md:leading-[50px] ">
+        <div class=" text-teal-50  text-[22px] md:text-[28px] text-center md:text-left font-light font-cairo w-[90%] lg:w-[850px] leading-[40px] md:leading-[50px] ">
           Bringing nature’s beauty to your doorstep with elegant and fresh floral arrangements.
         </div>
 
@@ -58,25 +58,26 @@ const offerData = [
   <!-- About Section -->
   <div class="bg-[url('../assets/about-us-cover.png')] bg-cover bg-center h-auto py-16 flex flex-wrap md:flex-nowrap items-center justify-center gap-10 px-6 md:px-12 lg:px-20">
 
-    <div class="hidden md:flex mr-40 mb-10">
-      <div class="w-[340px] h-[400px] rounded-2xl border-2 border-dashed border-gray-400" />
-        <div class="absolute px-24 py-14">
-          <img src="~/assets/about-us-img.png" alt="about" width="80%">
-        </div>
-     </div>
+ 
+ <div class="hidden md:flex mb-10 md:w-1/2 lg:w-[40%] justify-center">
+  <img src="../assets/about img.png" alt="about" class="w-full max-w-[300px] lg:max-w-[400px] object-contain" />
+</div>
+ <div class="flex flex-col gap-6 items-center md:items-start max-w-screen-md md:w-1/2 lg:w-[60%]">
+  <p class="text-violet-950 text-2xl font-normal font-cairo text-center md:text-left">About Us</p>
 
-      <div class="flex flex-col gap-6 items-center md:items-start max-w-screen-lg">
-          <p class="text-violet-950 text-2xl font-normal font-cairo text-center md:text-left">About Us</p>
-          <h1 class="text-purple-950 font-bold text-3xl md:text-5xl text-center md:text-left font-cairo md:tracking-[4px]">
-            The Art of Floral Expression
-          </h1>
-          <p class="text-purple-950 leading-[35px] md:leading-[40px] font-cairo text-xl md:text-2xl text-center md:text-left px-2 md:px-0 max-w-[850px]">
-            Flowers speak the language of love, care, and joy. At Floral Haven, we curate exquisite floral arrangements that bring happiness to every moment. Whether you need a bouquet for a special occasion or just to brighten someone's day, we have the perfect flowers for you.
-          </p>
-          <Button buttonName="Start Shopping" />
-      </div>
+  <h1 class="text-purple-950 font-bold text-3xl md:text-5xl text-center md:text-left font-cairo md:tracking-[4px]">
+    The Art of Floral Expression
+  </h1>
 
-  </div>
+  <p class="text-purple-950 leading-[35px] md:leading-[40px] font-cairo text-xl md:text-2xl text-center md:text-left px-2 md:px-0 max-w-[850px]">
+    Flowers speak the language of love, care, and joy. At Floral Haven, we curate exquisite floral arrangements that bring happiness to every moment. Whether you need a bouquet for a special occasion or just to brighten someone's day, we have the perfect flowers for you.
+  </p>
+
+  <Button buttonName="Start Shopping" />
+</div>
+
+</div>
+
 
 
 

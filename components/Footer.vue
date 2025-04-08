@@ -3,10 +3,12 @@
 <div class="flex flex-col z-10   md:rounded-none rounded-t-[40px] overflow-hidden ">
 
 
-   <div class=" md:flex flex-row w-full items-center bg-[url('../assets/bg-featuresCategory.png')] bg-cover bg-center justify-between gap-10 px-20 py-7">    
+   <div class=" md:flex flex-row w-full items-center bg-[url('../assets/bg-featuresCategory.png')] bg-cover bg-center justify-between gap-10 px-16 py-7">    
     
-      <div class="flex flex-col md:flex-row gap-2 items-center justify-center "> 
-         <img src="../assets/footer-logo.png" alt="footer-logo" class="w-20 h-16">
+      <div class="flex flex-col md:flex-row gap-4 md:gap-10 items-center justify-center "> 
+         <img src="../assets/footer-logo.svg" alt="footer-logo" class="hidden md:block w-16 h-16">
+         <img src="../assets/logo-w.svg" alt="logo" class="block md:hidden w-28 h-20" />
+
          
          <div class="flex flex-col gap-2">
               <h1 class="hidden md:block text-indigo-950 text-2xl font-semibold font-cairo">Rozato</h1>
