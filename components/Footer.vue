@@ -1,6 +1,6 @@
 <template>
 
-<div class="flex flex-col z-10   md:rounded-none rounded-t-[40px] overflow-hidden ">
+<div class="flex flex-col z-10 md:rounded-none rounded-t-[40px] overflow-hidden ">
 
 
    <div class=" md:flex flex-row w-full items-center bg-[url('../assets/bg-featuresCategory.png')] bg-cover bg-center justify-between gap-10 px-16 py-7">    

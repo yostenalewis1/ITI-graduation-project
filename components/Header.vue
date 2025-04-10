@@ -150,7 +150,7 @@ watch([showSignUp, showLogin], ([signup, login]) => {
                       </svg>
                   </nuxt-link>
 
-                  <nuxt-link to="/"
+                  <nuxt-link to="/profile"
               
                    >
                       <svg 
