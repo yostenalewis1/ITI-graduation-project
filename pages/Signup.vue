@@ -6,10 +6,16 @@
 const emit = defineEmits(['close', 'switch-to-login']);
 
 const schema = yup.object({
-  fullName: yup.string()
-      .required('Full Name is required')
+  firstName: yup.string()
+      .required('First Name is required')
       .strict()
-      .matches(/^[a-zA-Z\s]+$/, "Full Name must contain only letters"),
+      .matches(/^[a-zA-Z\s]+$/, "First Name must contain only letters"),
+
+  lastName: yup.string()
+      .required('Last Name is required')
+      .strict()
+      .matches(/^[a-zA-Z\s]+$/, "last Name must contain only letters"),
+
 
   email: yup.string()
         .email()
@@ -29,7 +35,8 @@ const { handleSubmit , errors , resetForm } = useForm({
   validationSchema: schema,
 });
 
-const { value: fullName } = useField('fullName');
+const { value: firstName } = useField('firstName');
+const { value: lastName } = useField('lastName');
 const { value: email } = useField('email');
 const { value: password } = useField('password');
 const { value: confirmPassword } = useField('confirmPassword');
@@ -62,10 +69,17 @@ const onSubmit = handleSubmit((values) => {
 
     <AuthLayout title="Sign Up">
       <form @submit="onSubmit" class="flex flex-col gap-5 w-[70%] items-center">
-        <div class="w-full">
-          <input v-model="fullName" type="text" placeholder="Full Name" class="w-full h-12 bg-[#8C6E82] border-b-2 border-white text-white text-lg font-cairo focus:outline-none" />
-          <p v-if="errors.fullName" class="text-[#820a0a] text-sm">{{ errors.fullName }}</p>
+        <div class="w-full flex gap-2">
+          <div class="w-1/2"> 
+            <input v-model="firstName" type="text" placeholder="First Name" class="w-full h-12 bg-[#8C6E82] border-b-2 border-white text-white text-lg font-cairo focus:outline-none" />
+            <p v-if="errors.firstName" class="text-[#820a0a] text-sm">{{ errors.firstName }}</p>
+          </div>
+          <div class="w-1/2"> 
+            <input v-model="lastName" type="text" placeholder="Last Name" class="w-full h-12 bg-[#8C6E82] border-b-2 border-white text-white text-lg font-cairo focus:outline-none" />
+            <p v-if="errors.lastName" class="text-[#820a0a] text-sm">{{ errors.lastName }}</p>
+          </div>
         </div>
+
 
         <div class="w-full">
           <input v-model="email" type="email" placeholder="Email" class="w-full h-12 bg-[#8C6E82] border-b-2 border-white text-white text-lg font-cairo focus:outline-none" />
