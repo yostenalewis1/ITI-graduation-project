@@ -1,8 +1,9 @@
 <script setup>
  import {useForm , useField} from "vee-validate";
  import * as yup from "yup";
+ import axios from "axios";
 
-
+ 
 const emit = defineEmits(['close', 'switch-to-login']);
 
 const schema = yup.object({
@@ -25,7 +26,7 @@ const schema = yup.object({
            .matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, 'Password must be at least 1 uppercase, 1 lowercase, 1 number and 1 special character')
            .required('Password is required'),
 
-  confirmPassword: yup
+  confirmPass: yup
     .string()
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Confirm Password is required'),
@@ -39,7 +40,7 @@ const { value: firstName } = useField('firstName');
 const { value: lastName } = useField('lastName');
 const { value: email } = useField('email');
 const { value: password } = useField('password');
-const { value: confirmPassword } = useField('confirmPassword');
+const { value: confirmPass } = useField('confirmPass');
 
 function testToastify() {
  
@@ -51,13 +52,41 @@ function testToastify() {
 }
  
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit(async(values) => {
   console.log(values);
+  const userData = {
+    firstName: values.firstName,
+    lastName: values.lastName,
+    email: values.email,
+    password: values.password,
+    confirmPass: values.confirmPass,
+  };
+
+  const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/signUp", userData);
+ 
+  console.log("Response data:", data);
+  console.log("Status:", status);
+ 
+  if (status === 'error' || (data && data.message === 'Email already exists')) {
+    console.error("Error during signup:", message);
+    useToastify("Email already exists", {
+      autoClose: 3000,
+      position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+      type: ToastifyOption.TYPE.ERROR,
+    });
+    return;  
+  }
+
+  console.log("signup success:", data);
+  console.log("Status:", status);
+
+ 
   testToastify();
-  resetForm()
+  resetForm();
+
   setTimeout(() => {
-    emit('switch-to-login');
-  }, 2000)
+    emit("switch-to-login");
+  }, 2000);
 });
 
 </script>
@@ -92,8 +121,8 @@ const onSubmit = handleSubmit((values) => {
         </div>
 
         <div class="w-full">
-          <input v-model="confirmPassword" type="password" placeholder="Confirm Password" class="w-full h-12 bg-[#8C6E82] border-b-2 border-white text-white text-lg font-cairo focus:outline-none" />
-          <p v-if="errors.confirmPassword" class="text-[#820a0a] text-sm">{{ errors.confirmPassword }}</p>
+          <input v-model="confirmPass" type="password" placeholder="Confirm Password" class="w-full h-12 bg-[#8C6E82] border-b-2 border-white text-white text-lg font-cairo focus:outline-none" />
+          <p v-if="errors.confirmPass" class="text-[#820a0a] text-sm">{{ errors.confirmPass }}</p>
         </div>
 
         <Button type="submit" buttonName="SIGN UP" class="w-full" />

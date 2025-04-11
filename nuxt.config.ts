@@ -7,7 +7,13 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
     "nuxt-toastify"
   ],
- 
+
+  runtimeConfig: {
+    public: {
+     baseUrl : process.env.NUXT_PUBLIC_BASE_URL ,
+    }
+  }
+  ,
   toastify: {
     autoClose: 2000,
     position: 'bottom-right',

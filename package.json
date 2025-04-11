@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxt/ui": "^2.21.1",
     "@vee-validate/nuxt": "^4.15.0",
+    "axios": "^1.8.4",
     "nuxi": "^3.22.5",
     "nuxt": "^3.16.0",
     "nuxt-toastify": "^1.0.0",

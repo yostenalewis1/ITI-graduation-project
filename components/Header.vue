@@ -1,67 +1,96 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import signup from '~/pages/Signup.vue';
 import login from '~/pages/Login.vue';
 import whiteLogo from '@/assets/logo-w-white.svg';
-import coloredLogo from '@/assets/logo-w.svg'
+import coloredLogo from '@/assets/logo-w.svg';
 
 const router = useRouter();
 const route = useRoute();
 
+const { isLoggedIn } = useAuth();
+
 const showSignUp = ref(false);
 const showLogin = ref(false);
-const showMenu = ref(false); 
+const showMenu = ref(false);
+
 //login state
-const isLoggedIn = ref(false); 
+// const isLoggedIn = ref(false); 
 
 const closeModel = () => {
   showSignUp.value = false;
   showLogin.value = false;
-  router.replace({ query: {} });  
+  router.replace({ query: {} });
 };
 
 const switchToLogin = () => {
   showSignUp.value = false;
   showLogin.value = true;
-  router.push({ query: { auth: 'login' } }); 
+  router.push({ query: { auth: 'login' } });
 };
 
 const switchToSignup = () => {
   showLogin.value = false;
   showSignUp.value = true;
-  router.push({ query: { auth: 'signup' } });  
+  router.push({ query: { auth: 'signup' } });
 };
 
 const toggleMenu = () => {
   showMenu.value = !showMenu.value;
 };
 
-//login 
-const onLoginSuccess =()=>{
+//login
+const onLoginSuccess = () => {
   isLoggedIn.value = true;
   showLogin.value = false;
-}
+};
 
-
-const logout=()=>{
+const logout = () => {
   isLoggedIn.value = false;
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  }
   showLogin.value = false;
-  showSignUp.value = false; 
-}
+  showSignUp.value = false;
+};
 
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem("token");
+    if (token) {
+      isLoggedIn.value = true;
+    }
+  }
+});
+
+watchEffect(() => {
+  if (isLoggedIn.value) {
+    closeModel();
+  } else if (route.query.auth === 'login') {
+    showLogin.value = true;
+    showSignUp.value = false;
+  } else if (route.query.auth === 'signup') {
+    showSignUp.value = true;
+    showLogin.value = false;
+  } else {
+    closeModel();
+  }
+});
 
 watch([showSignUp, showLogin], ([signup, login]) => {
   document.body.style.overflow = (signup || login) ? 'hidden' : 'auto';
 });
 </script>
 
+
 <template>
-  <header class="absolute w-full bg-transparent text-white px-5 lg:px-10 py-4 z-50">
+  <header class="absolute w-full bg-transparent text-white px-5 lg:px-10  z-50">
     <div class="container mx-auto flex justify-between items-center text-indigo-950"
          :class="{ 'text-white': route.path === '/' }">
          
-      <div to="/" class="text-2xl font-bold text-white">
+      <div class="text-2xl font-bold text-white">
         <img
           :src="route.path === '/' ? whiteLogo : coloredLogo"
           alt="logo"

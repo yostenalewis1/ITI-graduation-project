@@ -19,7 +19,7 @@ const schema = yup.object({
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Confirm Password is required'),
   });
-
+  
 const { handleSubmit , errors} = useForm({
   validationSchema: schema,
 });
@@ -34,6 +34,7 @@ const onSubmit = handleSubmit((values) => {
 
 const switchToLogin = () => {
   confirmPage.value = false;
+  emit('switch-to-login');
 };
 </script>
  

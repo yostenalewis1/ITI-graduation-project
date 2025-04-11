@@ -1,29 +1,66 @@
 <script setup >
 import PinInput from '~/components/PinInput.vue';
 import SetNewPassword from '../pages/SetNewPassword.vue';
-import {useRouter , useRoute } from 'vue-router';
-const router = useRouter();
-const route = useRoute();
+ 
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'switch-to-login']);
 const value = ref([]) 
 const setNewPassword = ref(false)
  
 
-function onSubmit(event) { 
+async function onSubmit(event) { 
    event.preventDefault();
-   
-   setNewPassword.value = true;
-//    router.replace({ query: { auth: "setNewPassword" } });
+   const userCode = { code: Array.isArray(value) ? value.join('') : value };    
+ const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/verifyResetCode", userCode);
+
+ if (status === 'error') {
+  console.error("Error during code verification:", message);
+  useToastify("Invalid code, please try again", {
+    autoClose: 3000,
+    position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+    type: ToastifyOption.TYPE.ERROR,
+  });
+  return;
+}
+ 
+console.log("Code verified successfully:", data);
+setNewPassword.value = true;
 }
 
+
+async function resendCode()
+{
+  
+  const email =localStorage.getItem("email");
+  const userData = { email }; 
+  const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/forgotPass", userData);
+
+  if (status === 'error') {
+    console.error("Error Forget pass:", message);
+    useToastify("Invalid email", {
+      autoClose: 3000,
+      position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+      type: ToastifyOption.TYPE.ERROR,
+    });
+    return;  
+  } 
+
+  console.log("email sent .... ", data);
+
+  useToastify("We sent a code again to you ...", {
+    autoClose: 2000,
+    position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+    type: ToastifyOption.TYPE.SUCCESS,
+  });
+}
+ 
 const closeModal = () => {
 emit('close');
 };
 
 const switchToLogin = () => {
     setNewPassword.value = false;
-    
+    emit('switch-to-login');
 };
 </script> 
 
@@ -40,7 +77,7 @@ const switchToLogin = () => {
                 <p class="font-cairo text-lg md:text-md">We sent code to your email</p>
                <PinInput v-model="value" class="text-center" />
                <Button type="submit" buttonName="Send e-mail"/>
-                <p class="">  Didn’t receive the email?<button type="button" class="underline">Click to resend</button></p>
+                <p class="">  Didn’t receive the email?<button type="button" @click="resendCode" class="underline">Click to resend</button></p>
         </div>
     </form>  
   

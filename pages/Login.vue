@@ -1,12 +1,12 @@
 <script setup>
 
 import {useForm , useField} from "vee-validate";
- import * as yup from "yup";
+import * as yup from "yup";
 
 import ForgetPassword from './ForgetPassword.vue';
 const showForgetPassword = ref(false);
 const emit = defineEmits(['close', 'switch-to-signup','login-success']);
-
+const isLoading = ref(false);
 
 const closeModal = () => {
 emit('close');
@@ -15,9 +15,6 @@ emit('close');
 const switchToLogin = () => {
   showForgetPassword.value = false;
 };
-
-
-
 
 const schema = yup.object({
   email: yup.string().required('Email is required'),
@@ -28,17 +25,51 @@ const { handleSubmit , errors } = useForm({
   validationSchema: schema,
 });
 
-
 const { value: email } = useField('email');
 const { value: password } = useField('password');
 
 
+ 
 
-
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit(async(values) => {
   console.log(values);
-  emit('login-success')
+  if (isLoading.value) return;
+  isLoading.value = true;
+
+  const userData = {
+    email: values.email,
+    password: values.password,
+  };
+ 
+  const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/signIn", userData);
+
+  isLoading.value = false;
+  if (status === 'error') {
+  console.error("Error during login:", message);
+  console.log("Full response:", { data, status, message });  
+  useToastify("Invalid email or password", {
+    autoClose: 3000,
+    position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+    type: ToastifyOption.TYPE.ERROR,
+  });
+  return;
+}
+
+
+  console.log("login success:", data);
+  localStorage.setItem("user",  values.email);
+  localStorage.setItem("token", data.token);
+
+
+  useToastify("Login successfully", {
+    autoClose: 2000,
+    position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+    type: ToastifyOption.TYPE.SUCCESS,
+  });
+
+  emit('login-success');
 });
+
 
 </script>
 
@@ -57,9 +88,9 @@ const onSubmit = handleSubmit((values) => {
           <p v-if="errors.password" class="text-[#820a0a] text-sm">{{ errors.password }}</p>
         </div>
 
-
+ 
         <div class="w-full text-right mb-3">
-           <button @click="showForgetPassword = true" class="font-cairo">Forget password ?</button>
+           <button type="button" @click="showForgetPassword = true" class="font-cairo">Forget password ?</button>
         </div>
        
         <Button type="submit" buttonName="Login" class="w-full" />

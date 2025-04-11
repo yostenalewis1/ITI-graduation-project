@@ -12,6 +12,11 @@ const passwordReset = ref(false);
 const closeModal = () => {
 emit('close');
 };
+
+const switchToLogin = () => {
+    passwordReset.value = false;
+    emit('switch-to-login');
+};
 const schema = yup.object({
   email: yup.string()
         .email()
@@ -24,12 +29,38 @@ const { handleSubmit , errors} = useForm({
 
 const { value: email } = useField('email');
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit(async (values) => {  
   console.log(values);
-  passwordReset.value = true;
+  const userData = {
+    email: values.email,
+  };
 
-//  router.push({ query: { auth: "forgetPassword" } });
+  const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/forgotPass", userData);
+
+  if (status === 'error') {
+    console.error("Error Forget pass:", message);
+    useToastify("Invalid email", {
+      autoClose: 3000,
+      position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+      type: ToastifyOption.TYPE.ERROR,
+    });
+    return;  
+  }
+
+  console.log("email sent .... ", data);
+
+  useToastify("We sent a code to you ...", {
+    autoClose: 2000,
+    position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+    type: ToastifyOption.TYPE.SUCCESS,
+  });
+  localStorage.setItem("email", values.email);
+
+  passwordReset.value = true;
 });
+
+
+ 
 </script>
 
 <template>
@@ -69,9 +100,10 @@ const onSubmit = handleSubmit((values) => {
     </div>
 
     <div v-if="passwordReset" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <PasswordReset  @close="closeModal"/>
+      <PasswordReset  @close="closeModal" @switch-to-login="switchToLogin"/>
     </div>
  </div>
 </template>
 
 
+ 
