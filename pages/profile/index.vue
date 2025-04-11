@@ -1,8 +1,36 @@
 <script setup>
-   definePageMeta({
-  layout: 'profile' 
-}) 
+import { ref, onMounted } from 'vue';
+
+definePageMeta({
+  layout: 'profile',
+});
  
+ 
+
+const userName = ref('');
+if (typeof window !== 'undefined') {
+  userName.value = localStorage.getItem("userName");
+}
+
+// onMounted(async () => {
+//     try {
+  
+//       const { data, status, message } = await useAsyncFetch('GET', '/api/v1/users/user');
+//       console.log("User data fetched successfully:", data);
+//        console.log("Status:", status); 
+//        console.log("username:", data.user.firstName);
+//        userName.value = data.user.firstName;
+//       // if (status !== 'error' && data?.firstName) {
+//       //   userName.value = data.firstName;   
+//       //   localStorage.setItem("user", data.firstName);   
+//       // } else {
+//       //   console.log("Error:", message);
+//       // }
+//     } catch (error) {
+//       console.error("Error fetching user data:", error);
+//     }
+//   }
+// );
 </script>
  
 
@@ -17,7 +45,7 @@
       class="w-20 h-20 rounded-full object-cover"
     />
     <div>
-      <h2 class="text-2xl font-semibold text-indigo-950"> Hello User , welcome back !  </h2>
+      <h2 class="text-2xl font-semibold text-indigo-950"> Hello {{userName}} , welcome back !  </h2>
       <p class="text-sm text-indigo-950"> </p>
     </div>
   </div>

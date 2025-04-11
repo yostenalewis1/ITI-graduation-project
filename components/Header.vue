@@ -52,6 +52,9 @@ const logout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
   }
+   const token = useCookie('token');
+   token.value = null; 
+
   showLogin.value = false;
   showSignUp.value = false;
 };

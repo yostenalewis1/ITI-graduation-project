@@ -3,17 +3,22 @@ export const useAsyncFetch = async (method, endpoint, body = null) => {
     const config = useRuntimeConfig();
 
     try {
-      
-        const response = await $fetch(endpoint, {
+ 
+        const options = {
             method: method,
             headers: {
                 authorization: `Bearer ${token.value}`,
             },
-            body: body,
             baseURL: config.public.baseUrl,
-        });
+        };
 
        
+        if (method !== 'GET' && body) {
+            options.body = body;   
+        }
+
+        const response = await $fetch(endpoint, options);
+
         if (!response || response.error) {
             throw new Error(response.error || 'Unknown error');
         }
