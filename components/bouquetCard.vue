@@ -10,13 +10,51 @@ const toggleIcon =()=>{
         heartIcon.value = heart;
     } 
 }  
+
+
+const products = ref([])
+const getProducts = async ()=>{
+    const {data , status , message } = await useAsyncFetch("GET","/api/v1/products/all/?page=1&limit=5")
+    
+    if(status === 'success'){
+        products.value = data.products
+
+    }
+    else{
+        console.error("failed to fetch products", message)
+    }
+  
+}
+
+onMounted(()=>{
+    getProducts()
+})
+
+
 </script>
 
 
 
 
 <template>
-    <div class="flex flex-col w-[350px] pb-5 rounded-xl border-2 gap-4">
+    <div v-for="(product , index) in products" :key="index" class="flex flex-col w-[350px] pb-5 rounded-xl border-2 gap-4">
+        <img :src="product.image" alt="Bouquet" class="rounded-t-xl w-full h-64 object-cover p-5" />
+        
+        <p class="text-indigo-950 text-sm pl-5">{{ product.title }}</p>
+        
+        
+        <div class="flex flex-row justify-between px-5">
+          <p class="text-indigo-950 text-md font-bold">Price : {{ product.price }} LE</p>
+          <div class=" flex gap-4">
+          <button @click="toggleIcon"> <img :src="heartIcon" class="w-6 h-6"  /></button>
+          <button> <img src="../assets/Vector (3).svg" class="w-6 h-6" /></button>
+          </div>
+         
+        </div>
+    </div>
+</template>
+
+<!-- <div class="flex flex-col w-[350px] pb-5 rounded-xl border-2 gap-4">
         <img src="../assets/flower1.png" alt="Bouquet" class="rounded-t-xl w-full h-64 object-cover p-5" />
         
         <p class="text-indigo-950 text-sm pl-5">Purple White Bouquet</p>
@@ -30,5 +68,4 @@ const toggleIcon =()=>{
           </div>
          
         </div>
-    </div>
-</template>
+    </div> -->

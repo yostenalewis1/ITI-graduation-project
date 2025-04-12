@@ -51,6 +51,7 @@ const logout = () => {
   if (typeof window !== 'undefined') {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("userName");
   }
    const token = useCookie('token');
    token.value = null; 

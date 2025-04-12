@@ -1,39 +1,82 @@
 <script setup>
-import {useForm , useField} from "vee-validate";
+import { useForm, useField, Form } from 'vee-validate';
 import * as yup from "yup";
-
 
 definePageMeta({
   layout: 'profile' 
 }) 
 
+const userName = ref('')
+const userEmail = ref('')
 
 const schema = yup.object({
-  username : yup.string().required('username is required'),
+  firstName: yup.string().required('First name is required'),
+  lastName: yup.string().required('Last name is required'),
   email: yup.string().required('Email is required'),
-  password: yup.string().required('Password is required'),
-  phoneNumber: yup.string().required('Phone Number is required'),
-  address: yup.string().required('Address is required'),
+  // phoneNumber: yup.string().required('Phone number is required'),
+  // address: yup
+  // .string()
+  // .required('Address is required')
+  // .test('is-valid-address', 'Address must be in the correct format', (value) => {
+  //   return value && value.split(',').length > 0; // تأكد من أن العنوان يحتوي على قيمة واحدة على الأقل
+  // })
+});
 
-  });
-
-const { handleSubmit , errors } = useForm({
+const { handleSubmit, errors } = useForm({
   validationSchema: schema,
 });
 
+const { value: firstName } = useField('firstName');
+const { value: lastName } = useField('lastName');
 const { value: email } = useField('email');
-const { value: password } = useField('password');
-const { value: username } = useField('username');
-const { value: phoneNumber } = useField('phoneNumber');
-const { value: address } = useField('address');
- 
+// const { value: phoneNumber } = useField('phoneNumber');
+// const { value: address } = useField('address');
 
-const onSubmit = handleSubmit((values) => {
-  console.log(values);
-  emit('login-success')
+onMounted(async()=>{
+  const user = await useUser();
+  console.log("user from compo : " , user);
+  firstName.value = user?.firstName || '';
+  lastName.value = user?.lastName || '';
+  userName.value = user?.userName 
+  userEmail.value = user?.email 
+  email.value = user?.email || '';
+  // phoneNumber.value = user?.phoneNumber || '';  
+  // address.value = Array.isArray(user?.address) ? user.address.join(', ') : '';
+})
+
+const onSubmit = handleSubmit(async(values) => {
+  console.log("Form values:", values);
+
+  // const addressArray = values.address.split(',').map((el) => el.trim()).filter(Boolean);
+
+  const userData = {
+    firstName: values.firstName,
+    lastName: values.lastName,
+    email: values.email,
+    // phoneNumber: values.phoneNumber,
+    // address: addressArray 
+  
+  }
+  const {data,status, message} =await useAsyncFetch('PUT','/api/v1/users/updateData',userData)
+   
+  if(status == 'error') {
+    console.error("Error updating user data:", message);
+    useToastify("Error updating user data", {
+      autoClose: 3000,
+      position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+      type: ToastifyOption.TYPE.ERROR,
+    });
+    return;
+  }
+  console.log("User data updated successfully:", data);
+  useToastify("User data updated successfully", {
+    autoClose: 2000,
+    position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+    type: ToastifyOption.TYPE.SUCCESS,
+  });
+
 });
 </script>
-
  
 
 <template>
@@ -46,8 +89,8 @@ const onSubmit = handleSubmit((values) => {
         class="w-20 h-20 rounded-full object-cover"
       />
       <div class="text-center sm:text-left">
-        <h2 class="text-2xl font-semibold text-indigo-950">Profile</h2>
-        <p class="text-sm text-indigo-950">name@example.com</p>
+        <h2 class="text-2xl font-semibold text-indigo-950">{{ userName }}</h2>
+        <p class="text-sm text-indigo-950">{{ userEmail }}</p>
       </div>
     </div>
 
@@ -56,19 +99,31 @@ const onSubmit = handleSubmit((values) => {
       <div class="space-y-6">
      
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
-          <label class="text-lg font-bold text-indigo-950 sm:w-60">Username:</label>
+          <label class="text-lg font-bold text-indigo-950 sm:w-60">firstName:</label>
           <input
-            v-model="username"
+            v-model="firstName"
             type="text"
             placeholder="Username"
             :class="[
               'w-full h-12 bg-transparent border-b-2 text-indigo-950 text-lg font-cairo focus:outline-none',
-              errors.username ? 'border-red-500' : 'border-indigo-800'
+              errors.firstName ? 'border-red-500' : 'border-indigo-800'
             ]"
           />
         </div>
 
-  
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
+          <label class="text-lg font-bold text-indigo-950 sm:w-60">lastName:</label>
+          <input
+            v-model="lastName"
+            type="text"
+            placeholder="Username"
+            :class="[
+              'w-full h-12 bg-transparent border-b-2 text-indigo-950 text-lg font-cairo focus:outline-none',
+              errors.lastName ? 'border-red-500' : 'border-indigo-800'
+            ]"
+          />
+        </div>
+
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
           <label class="text-lg font-bold text-indigo-950 sm:w-60">E-mail:</label>
           <input
@@ -83,7 +138,7 @@ const onSubmit = handleSubmit((values) => {
         </div>
 
         
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
+        <!-- <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
           <label class="text-lg font-bold text-indigo-950 sm:w-60">Phone number:</label>
           <input
             v-model="phoneNumber"
@@ -95,20 +150,8 @@ const onSubmit = handleSubmit((values) => {
             ]"
           />
         </div>
- 
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
-          <label class="text-lg font-bold text-indigo-950 sm:w-60">Password:</label>
-          <input
-            v-model="password"
-            type="text"
-            placeholder="Password"
-            :class="[
-              'w-full h-12 bg-transparent border-b-2 text-indigo-950 text-lg font-cairo focus:outline-none',
-              errors.password ? 'border-red-500' : 'border-indigo-800'
-            ]"
-          />
-        </div>
-
+  -->
+<!-- 
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
           <label class="text-lg font-bold text-indigo-950 sm:w-60">Address:</label>
           <input
@@ -120,18 +163,19 @@ const onSubmit = handleSubmit((values) => {
               errors.address ? 'border-red-500' : 'border-indigo-800'
             ]"
           />
-        </div>
+        </div> -->
+
       </div>
 
-  
-      <div class="pt-8">
-        <button
+     <div class="p-6">
+       <button
           type="submit"
           class="w-full py-3 bg-[#4c1f7a] hover:bg-[#5a2c8c] text-white text-lg font-semibold rounded-xl transition"
         >
           Edit
         </button>
-      </div>
+     </div>
+       
     </Form>
   </div>
 </template>

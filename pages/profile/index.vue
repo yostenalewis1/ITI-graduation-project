@@ -8,35 +8,25 @@ definePageMeta({
  
 
 const userName = ref('');
-if (typeof window !== 'undefined') {
-  userName.value = localStorage.getItem("userName");
-}
+const email = ref('')
+const address = ref('')
 
-// onMounted(async () => {
-//     try {
-  
-//       const { data, status, message } = await useAsyncFetch('GET', '/api/v1/users/user');
-//       console.log("User data fetched successfully:", data);
-//        console.log("Status:", status); 
-//        console.log("username:", data.user.firstName);
-//        userName.value = data.user.firstName;
-//       // if (status !== 'error' && data?.firstName) {
-//       //   userName.value = data.firstName;   
-//       //   localStorage.setItem("user", data.firstName);   
-//       // } else {
-//       //   console.log("Error:", message);
-//       // }
-//     } catch (error) {
-//       console.error("Error fetching user data:", error);
-//     }
-//   }
-// );
+
+onMounted(async()=> {
+  const user = await useUser();
+  console.log("user from combosables : ",user );
+  userName.value = user?.userName
+  email.value = user?.email
+  address.value = user?.address
+})
+
+
 </script>
  
 
 
 <template>    
- <div class="max-w-3xl mx-auto p-6 mt-20 space-y-10">
+ <div class="max-w-3xl mx-auto p-6 space-y-10">
  
   <div class="flex items-center gap-4 mt-12">
     <img
@@ -46,7 +36,9 @@ if (typeof window !== 'undefined') {
     />
     <div>
       <h2 class="text-2xl font-semibold text-indigo-950"> Hello {{userName}} , welcome back !  </h2>
-      <p class="text-sm text-indigo-950"> </p>
+      <p class="text-sm text-indigo-950"> your email is : {{ email }} </p>
+      <p class="text-sm text-indigo-950"> your address is : {{ address }} </p>
+      
     </div>
   </div>
 

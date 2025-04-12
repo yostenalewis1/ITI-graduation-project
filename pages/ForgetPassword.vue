@@ -32,7 +32,7 @@ const { value: email } = useField('email');
 const onSubmit = handleSubmit(async (values) => {  
   console.log(values);
   const userData = {
-    email: values.email,
+    email:values.email,
   };
 
   const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/forgotPass", userData);

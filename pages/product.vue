@@ -4,15 +4,6 @@
         
       <div class="flex flex-row flex-wrap gap-3">
          <BouquetCard />
-         <BouquetCard />
-         <BouquetCard />
-         <BouquetCard />
-         <BouquetCard />
-         <BouquetCard />
-         <BouquetCard />
-         <BouquetCard />
-         <BouquetCard />
-         <BouquetCard />
       </div>
       
    </div>

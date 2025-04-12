@@ -71,30 +71,30 @@ token.value = data.token;
     position: ToastifyOption.POSITION.BOTTOM_RIGHT,
     type: ToastifyOption.TYPE.SUCCESS,
   });
-  await fetchUserInfo();
+  // await fetchUserInfo();
   emit('login-success');
 });
 
-const fetchUserInfo = (async () => {
-    try {
-      const { data, status, message } = await useAsyncFetch('GET', '/api/v1/users/user');
-      console.log("User data fetched successfully:", data);
-       console.log("Status:", status); 
-       console.log("username:", data.user.firstName);
-      localStorage.setItem("userName", data.user.firstName);
+// const fetchUserInfo = (async () => {
+//     try {
+//       const { data, status, message } = await useAsyncFetch('GET', '/api/v1/users/user');
+//       console.log("User data fetched successfully:", data);
+//        console.log("Status:", status); 
+//        console.log("username:", data.user.firstName);
+//       localStorage.setItem("userName", data.user.firstName);
       
-      //  userName.value = data.user.firstName;
-      // if (status !== 'error' && data?.firstName) {
-      //   userName.value = data.firstName;   
-      //   localStorage.setItem("user", data.firstName);   
-      // } else {
-      //   console.log("Error:", message);
-      // }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  }
-);
+//       //  userName.value = data.user.firstName;
+//       // if (status !== 'error' && data?.firstName) {
+//       //   userName.value = data.firstName;   
+//       //   localStorage.setItem("user", data.firstName);   
+//       // } else {
+//       //   console.log("Error:", message);
+//       // }
+//     } catch (error) {
+//       console.error("Error fetching user data:", error);
+//     }
+//   }
+// );
 
 
 </script>

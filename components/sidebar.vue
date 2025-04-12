@@ -8,9 +8,9 @@
               </div>  
         </NuxtLink>
         
-        <NuxtLink to="/profile/paymentMethod">
+        <NuxtLink to="/profile/changePass">
              <div class="flex gap-2 items-center justify-center">
-                 <p class="text-indigo-950 text-xl font-cairo font-bold ">Payment method</p>
+                 <p class="text-indigo-950 text-xl font-cairo font-bold ">Change password</p>
                  <img src="../assets/arrow.svg" alt="Arrow"  />
              </div>
         </NuxtLink>
