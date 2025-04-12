@@ -58,6 +58,7 @@ const logout = () => {
 
   showLogin.value = false;
   showSignUp.value = false;
+  router.push('/');
 };
 
 onMounted(() => {

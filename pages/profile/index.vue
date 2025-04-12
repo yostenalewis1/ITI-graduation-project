@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';  
+const router = useRouter();
 
 definePageMeta({
   layout: 'profile',
@@ -20,6 +22,16 @@ onMounted(async()=> {
   address.value = user?.address
 })
 
+const logout = () => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+  }
+   const token = useCookie('token');
+   token.value = null; 
+   router.push('/');
+};
 
 </script>
  
@@ -41,7 +53,9 @@ onMounted(async()=> {
       
     </div>
   </div>
-
+  
+  <p  class="text-sm text-indigo-950"> Please go to Personal information to complete your informations</p>
+  <button @click="logout();" class="border rounded-xl p-2 ml-2 px-3 bg-indigo-950 text-white">Logout</button>
   
 </div>
 
