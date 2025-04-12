@@ -1,37 +1,42 @@
-<script setup >
-import PinInput from '~/components/PinInput.vue';
+<script setup>
+import { ref } from 'vue';
 import SetNewPassword from '../pages/SetNewPassword.vue';
- 
 
 const emit = defineEmits(['close', 'switch-to-login']);
-const value = ref([]) 
-const setNewPassword = ref(false)
+const setNewPassword = ref(false);
+let userCode = ref('');
+
  
 
 async function onSubmit(event) { 
-   event.preventDefault();
-   const userCode = { code: Array.isArray(value) ? value.join('') : value };    
- const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/verifyResetCode", userCode);
+   event.preventDefault();  
+   console.log('Submitting code:', userCode.value);  
+   const code = {
+      code: userCode.value,
+   };
+   const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/verifyResetCode", code);
 
- if (status === 'error') {
-  console.error("Error during code verification:", message);
-  useToastify("Invalid code, please try again", {
-    autoClose: 3000,
-    position: ToastifyOption.POSITION.BOTTOM_RIGHT,
-    type: ToastifyOption.TYPE.ERROR,
-  });
-  return;
+   if (status === 'error') {
+     console.error("Error during code verification:", message);
+     useToastify("Invalid code, please try again", {
+       autoClose: 3000,
+       position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+       type: ToastifyOption.TYPE.ERROR,
+     });
+     return;
+   }
+
+   console.log("Code verified successfully:", data);
+   useToastify('Code verified successfully:', {
+     autoClose: 2000,
+     position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+     type: ToastifyOption.TYPE.SUCCESS,
+   });
+   setNewPassword.value = true;
 }
- 
-console.log("Code verified successfully:", data);
-setNewPassword.value = true;
-}
 
-
-async function resendCode()
-{
-  
-  const email =localStorage.getItem("email");
+async function resendCode() {
+  const email = localStorage.getItem("email");
   const userData = { email }; 
   const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/forgotPass", userData);
 
@@ -53,16 +58,16 @@ async function resendCode()
     type: ToastifyOption.TYPE.SUCCESS,
   });
 }
- 
+
 const closeModal = () => {
-emit('close');
+  emit('close');
 };
 
 const switchToLogin = () => {
-    setNewPassword.value = false;
-    emit('switch-to-login');
+  setNewPassword.value = false;
+  emit('switch-to-login');
 };
-</script> 
+</script>
 
 
 
@@ -75,7 +80,16 @@ const switchToLogin = () => {
        <div class="text-white text-5xl font-normal font-cairo">Password reset</div> 
         <div class="flex flex-col gap-5 w-[70%]">
                 <p class="font-cairo text-lg md:text-md">We sent code to your email</p>
-               <PinInput v-model="value" class="text-center" />
+              
+                <input
+                  v-model="userCode"   
+                  type="text"
+                  maxlength="4" 
+                  class="border border-gray-300 text-black text-xl font-semibold w-28 h-12 text-center rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+
+
+
                <Button type="submit" buttonName="Send e-mail"/>
                 <p class="">  Didn’t receive the email?<button type="button" @click="resendCode" class="underline">Click to resend</button></p>
         </div>

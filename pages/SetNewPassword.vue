@@ -10,13 +10,13 @@ emit('close');
 };
 
 const schema = yup.object({
-  password: yup.string()
+  newPassword: yup.string()
            .matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, 'Password must be at least 1 uppercase, 1 lowercase, 1 number and 1 special character')
            .required('Password is required'),
 
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref('password')], 'Passwords must match')
+    .oneOf([yup.ref('newPassword')], 'Passwords must match')
     .required('Confirm Password is required'),
   });
   
@@ -24,11 +24,37 @@ const { handleSubmit , errors} = useForm({
   validationSchema: schema,
 });
  
-const { value: password } = useField('password');
+const { value: newPassword } = useField('newPassword');
 const { value: confirmPassword } = useField('confirmPassword');
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit(async(values) => {
   console.log(values);
+
+    const userData = {
+      newPassword: values.newPassword,
+      confirmPassword: values.confirmPassword,
+    };
+
+    const { data, status, message } = await useAsyncFetch("PUT", "/api/v1/auth/resetPassword", userData);
+
+
+    if (status === 'error') {
+      console.error("Error updating password:", message);
+      useToastify("Error updating password , please check on your password again .", {
+        autoClose: 3000,
+        position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+        type: ToastifyOption.TYPE.ERROR,
+      });
+      return;
+    }
+
+    console.log('Password updated successfully:', data);
+    useToastify('Password updated successfully', {
+      autoClose: 2000,
+      position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+      type: ToastifyOption.TYPE.SUCCESS,
+    });
+
   confirmPage.value = true; 
 });
 
@@ -51,8 +77,8 @@ const switchToLogin = () => {
                 <form @submit="onSubmit" class="flex flex-col gap-5 w-full md:w-[70%] items-center">
  
                     <div class="w-full">
-                    <input v-model="password" type="password" placeholder="Password" class="w-full h-12 bg-[#8C6E82] border-b-2 border-white text-white text-lg font-cairo focus:outline-none" />
-                    <p v-if="errors.password" class="text-[#820a0a] text-sm">{{ errors.password }}</p>
+                    <input v-model="newPassword" type="password" placeholder="New Password" class="w-full h-12 bg-[#8C6E82] border-b-2 border-white text-white text-lg font-cairo focus:outline-none" />
+                    <p v-if="errors.newPassword" class="text-[#820a0a] text-sm">{{ errors.newPassword }}</p>
                     </div>
 
                     <div class="w-full">

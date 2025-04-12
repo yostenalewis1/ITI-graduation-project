@@ -7,6 +7,7 @@ export const useAsyncFetch = async (method, endpoint, body = null) => {
         const options = {
             method: method,
             headers: {
+                'Content-Type': 'application/json',
                 authorization: `Bearer ${token.value}`,
             },
             baseURL: config.public.baseUrl,
@@ -14,7 +15,7 @@ export const useAsyncFetch = async (method, endpoint, body = null) => {
 
        
         if (method !== 'GET' && body) {
-            options.body = body;   
+            options.body = JSON.stringify(body);  
         }
 
         const response = await $fetch(endpoint, options);
