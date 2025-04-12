@@ -6,12 +6,13 @@ const router = useRouter();
 definePageMeta({
   layout: 'profile',
 });
- 
+
  
 
 const userName = ref('');
 const email = ref('')
 const address = ref('')
+const mobileNumber = ref('')
 
 
 onMounted(async()=> {
@@ -20,6 +21,7 @@ onMounted(async()=> {
   userName.value = user?.userName
   email.value = user?.email
   address.value = user?.address
+  mobileNumber.value = user?.mobileNumber
 })
 
 const logout = () => {
@@ -42,14 +44,15 @@ const logout = () => {
  
   <div class="flex items-center gap-4 mt-12">
     <img
-      src="../../assets/profile (3).png"
+      src="../../assets/cartoon girl.jpg"
       alt="Profile"
-      class="w-20 h-20 rounded-full object-cover"
+      class="w-[90px] h-[90px] rounded-full object-cover"
     />
     <div>
       <h2 class="text-2xl font-semibold text-indigo-950"> Hello {{userName}} , welcome back !  </h2>
       <p class="text-sm text-indigo-950"> your email is : {{ email }} </p>
       <p class="text-sm text-indigo-950"> your address is : {{ address }} </p>
+      <p class="text-sm text-indigo-950"> your Phone Number is : {{ mobileNumber }} </p>
       
     </div>
   </div>

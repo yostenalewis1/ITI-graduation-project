@@ -12,14 +12,10 @@ const userEmail = ref('')
 const schema = yup.object({
   firstName: yup.string().required('First name is required'),
   lastName: yup.string().required('Last name is required'),
-  email: yup.string().required('Email is required'),
-  // phoneNumber: yup.string().required('Phone number is required'),
-  // address: yup
-  // .string()
-  // .required('Address is required')
-  // .test('is-valid-address', 'Address must be in the correct format', (value) => {
-  //   return value && value.split(',').length > 0; // تأكد من أن العنوان يحتوي على قيمة واحدة على الأقل
-  // })
+  city: yup.string().required('city is required'),
+  street: yup.string().required('street is required'),
+  mobileNumber: yup.string().required('Phone number is required'),
+
 });
 
 const { handleSubmit, errors } = useForm({
@@ -29,8 +25,9 @@ const { handleSubmit, errors } = useForm({
 const { value: firstName } = useField('firstName');
 const { value: lastName } = useField('lastName');
 const { value: email } = useField('email');
-// const { value: phoneNumber } = useField('phoneNumber');
-// const { value: address } = useField('address');
+const { value: city } = useField('city');
+const { value: street } = useField('street');
+const { value: mobileNumber } = useField('mobileNumber');
 
 onMounted(async()=>{
   const user = await useUser();
@@ -40,23 +37,28 @@ onMounted(async()=>{
   userName.value = user?.userName 
   userEmail.value = user?.email 
   email.value = user?.email || '';
-  // phoneNumber.value = user?.phoneNumber || '';  
-  // address.value = Array.isArray(user?.address) ? user.address.join(', ') : '';
+  city.value = user?.city || '';
+  street.value = user?.street || '';
+  mobileNumber.value = user?.mobileNumber || '';  
+
 })
+
+
+
 
 const onSubmit = handleSubmit(async(values) => {
   console.log("Form values:", values);
 
-  // const addressArray = values.address.split(',').map((el) => el.trim()).filter(Boolean);
 
   const userData = {
     firstName: values.firstName,
     lastName: values.lastName,
     email: values.email,
-    // phoneNumber: values.phoneNumber,
-    // address: addressArray 
-  
+    city: values.city,
+    street: values.street,
+    mobileNumber: values.mobileNumber,
   }
+
   const {data,status, message} =await useAsyncFetch('PUT','/api/v1/users/updateData',userData)
    
   if(status == 'error') {
@@ -84,10 +86,10 @@ const onSubmit = handleSubmit(async(values) => {
    
     <div class="flex flex-col sm:flex-row items-center gap-4 mt-12">
       <img
-        src="../../assets/profile (3).png"
-        alt="Profile"
-        class="w-20 h-20 rounded-full object-cover"
-      />
+      src="../../assets/cartoon girl.jpg"
+      alt="Profile"
+      class="w-[90px] h-[90px] rounded-full object-cover"
+    />
       <div class="text-center sm:text-left">
         <h2 class="text-2xl font-semibold text-indigo-950">{{ userName }}</h2>
         <p class="text-sm text-indigo-950">{{ userEmail }}</p>
@@ -138,32 +140,46 @@ const onSubmit = handleSubmit(async(values) => {
         </div>
 
         
-        <!-- <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
           <label class="text-lg font-bold text-indigo-950 sm:w-60">Phone number:</label>
           <input
-            v-model="phoneNumber"
+            v-model="mobileNumber"
             type="text"
             placeholder="Phone number"
             :class="[
               'w-full h-12 bg-transparent border-b-2 text-indigo-950 text-lg font-cairo focus:outline-none',
-              errors.phoneNumber ? 'border-red-500' : 'border-indigo-800'
+              errors.mobileNumber ? 'border-red-500' : 'border-indigo-800'
             ]"
           />
         </div>
-  -->
-<!-- 
+ 
+
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-4">
-          <label class="text-lg font-bold text-indigo-950 sm:w-60">Address:</label>
-          <input
-            v-model="address"
-            type="text"
-            placeholder="Address"
-            :class="[
-              'w-full h-12 bg-transparent border-b-2 text-indigo-950 text-lg font-cairo focus:outline-none',
-              errors.address ? 'border-red-500' : 'border-indigo-800'
-            ]"
-          />
-        </div> -->
+              <label class="text-lg font-bold text-indigo-950 sm:w-60">Address:</label>
+
+              
+              <div class="w-full flex flex-col sm:flex-row gap-2">
+                <input
+                  v-model="city"
+                  type="text"
+                  placeholder="City"
+                  :class="[
+                    'w-full sm:w-1/2 h-12 bg-transparent border-b-2 text-indigo-950 text-lg font-cairo focus:outline-none',
+                    errors.city ? 'border-red-500' : 'border-indigo-800'
+                  ]"
+                />
+
+                <input
+                  v-model="street"
+                  type="text"
+                  placeholder="Street"
+                  :class="[
+                    'w-full sm:w-1/2 h-12 bg-transparent border-b-2 text-indigo-950 text-lg font-cairo focus:outline-none',
+                    errors.street ? 'border-red-500' : 'border-indigo-800'
+                  ]"
+                />
+              </div>
+          </div>
 
       </div>
 
