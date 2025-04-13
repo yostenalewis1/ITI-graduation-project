@@ -14,7 +14,7 @@ const toggleIcon =()=>{
 
 const products = ref([])
 const getProducts = async ()=>{
-    const {data , status , message } = await useAsyncFetch("GET","/api/v1/products/all/?page=1&limit=5")
+    const {data , status , message } = await useAsyncFetch("GET","https://flower-shop-db.vercel.app/api/v1/products/all/?page=1&limit=14")
     
     if(status === 'success'){
         products.value = data.products
@@ -38,7 +38,7 @@ onMounted(()=>{
 
 <template>
     <div v-for="(product , index) in products" :key="index" class="flex flex-col w-[350px] pb-5 rounded-xl border-2 gap-4">
-        <img :src="product.image" alt="Bouquet" class="rounded-t-xl w-full h-64 object-cover p-5" />
+        <img :src="product.image" alt="Bouquet" class="rounded-t-xl  object-cover p-5" />
         
         <p class="text-indigo-950 text-sm pl-5">{{ product.title }}</p>
         
