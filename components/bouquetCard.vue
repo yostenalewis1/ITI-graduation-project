@@ -2,9 +2,7 @@
 import { ref, onMounted } from 'vue';
 import heart from "../assets/Vector (1).svg";
 import fillHeart from "../assets/Fill-heart.svg";
-import { useCartStore } from '/stores/cart'; 
 
-const cartStore = useCartStore(); 
 
 const products = ref([]);
 
