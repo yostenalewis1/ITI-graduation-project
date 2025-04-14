@@ -113,7 +113,7 @@ watch([showSignUp, showLogin, showForgetPassword], ([signup, login, forgetPasswo
       <div v-if="showMenu" class="absolute top-16 left-0 w-full bg-indigo-950 text-white p-5 flex flex-col items-center gap-4 md:hidden z-90">
         <nuxt-link @click="toggleMenu" to="/" class="text-xl font-bold text-center font-cairo">Home</nuxt-link>
         <nuxt-link  @click="toggleMenu" to="/product" class="w-28 text-center text-xl font-normal font-cairo">Product</nuxt-link>
-        <nuxt-link @click="toggleMenu" to="/" class="w-28 text-center text-xl font-normal font-cairo">Category</nuxt-link>
+        <nuxt-link @click="toggleMenu" to="/category" class="w-28 text-center text-xl font-normal font-cairo">Category</nuxt-link>
         <nuxt-link @click="toggleMenu" to="/About" class="w-28 text-center text-xl font-normal font-cairo">About</nuxt-link>
         <nuxt-link  @click="toggleMenu" to="/ContactUs" class="w-40 text-center text-xl font-normal font-cairo">Contact-Us</nuxt-link>
         <template v-if="!isLoggedIn">
@@ -170,7 +170,7 @@ watch([showSignUp, showLogin, showForgetPassword], ([signup, login, forgetPasswo
       <nav class="hidden md:flex gap-[20px]">
         <nuxt-link to="/" class="text-xl font-bold text-center font-cairo">Home</nuxt-link>
         <nuxt-link to="/product" class="w-28 text-center text-xl font-normal font-cairo">Product</nuxt-link>
-        <nuxt-link to="/" class="w-28 text-center text-xl font-normal font-cairo">Category</nuxt-link>
+        <nuxt-link to="/category" class="w-28 text-center text-xl font-normal font-cairo">Category</nuxt-link>
         <nuxt-link to="/About" class="w-28 text-center text-xl font-normal font-cairo">About</nuxt-link>
         <nuxt-link to="/ContactUs" class="w-40 text-center text-xl font-normal font-cairo">Contact-Us</nuxt-link>
       </nav>

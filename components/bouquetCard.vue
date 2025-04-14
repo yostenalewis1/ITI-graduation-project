@@ -71,6 +71,7 @@ const addToCart = async (productId, quantity=1) => {
 watch(page, () => {
   getProducts();
 });
+
 </script>
 
 <template>
