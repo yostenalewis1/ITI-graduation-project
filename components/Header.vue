@@ -13,6 +13,7 @@ const { isLoggedIn } = useAuth();
 
 const showSignUp = ref(false);
 const showLogin = ref(false);
+const showForgetPassword=ref(false)
 const showMenu = ref(false);
 
 //login state
@@ -79,13 +80,13 @@ watchEffect(() => {
   } else if (route.query.auth === 'signup') {
     showSignUp.value = true;
     showLogin.value = false;
-  } else {
-    closeModel();
+  } else if (route.query.auth === 'forgetPassword') {
+    showForgetPassword.value = true;
   }
 });
 
-watch([showSignUp, showLogin], ([signup, login]) => {
-  document.body.style.overflow = (signup || login) ? 'hidden' : 'auto';
+watch([showSignUp, showLogin, showForgetPassword], ([signup, login, forgetPassword]) => {
+  document.body.style.overflow = (signup || login || forgetPassword) ? 'hidden' : 'auto';
 });
 </script>
 

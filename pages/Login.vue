@@ -1,37 +1,39 @@
 <script setup>
-
-import {useForm , useField} from "vee-validate";
+import { ref } from 'vue';
+import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
-
+import { useRouter } from "vue-router"; 
 import ForgetPassword from './ForgetPassword.vue';
+
 const showForgetPassword = ref(false);
-const emit = defineEmits(['close', 'switch-to-signup','login-success']);
+const emit = defineEmits(['close', 'switch-to-signup', 'login-success']);
 const isLoading = ref(false);
+const router = useRouter(); 
+const route=useRoute()
 
 const closeModal = () => {
-emit('close');
+  emit('close');
+  router.replace({ query: {} });
 };
+const switchToForgetPassword = () => {
+  showForgetPassword.value = true;
+  router.push({ query: { auth: "forgetPassword" } });
 
-const switchToLogin = () => {
-  showForgetPassword.value = false;
-};
+  };
 
 const schema = yup.object({
   email: yup.string().required('Email is required'),
   password: yup.string().required('Password is required'),
-  });
+});
 
-const { handleSubmit , errors } = useForm({
+const { handleSubmit, errors } = useForm({
   validationSchema: schema,
 });
 
 const { value: email } = useField('email');
 const { value: password } = useField('password');
 
-
- 
-
-const onSubmit = handleSubmit(async(values) => {
+const onSubmit = handleSubmit(async (values) => {
   console.log(values);
   if (isLoading.value) return;
   isLoading.value = true;
@@ -40,61 +42,52 @@ const onSubmit = handleSubmit(async(values) => {
     email: values.email,
     password: values.password,
   };
- 
+
   const { data, status, message } = await useAsyncFetch("POST", "/api/v1/auth/signIn", userData);
 
   isLoading.value = false;
   if (status === 'error') {
-  console.error("Error during login:", message);
-  console.log("Full response:", { data, status, message });  
-  useToastify("Invalid email or password", {
-    autoClose: 3000,
-    position: ToastifyOption.POSITION.BOTTOM_RIGHT,
-    type: ToastifyOption.TYPE.ERROR,
-  });
-  return;
-}
-
+    console.error("Error during login:", message);
+    console.log("Full response:", { data, status, message });
+    useToastify("Invalid email or password", {
+      autoClose: 3000,
+      position: ToastifyOption.POSITION.BOTTOM_RIGHT,
+      type: ToastifyOption.TYPE.ERROR,
+    });
+    return;
+  }
 
   console.log("login success:", data);
-  localStorage.setItem("user",  values.email);
+  localStorage.setItem("user", values.email);
   localStorage.setItem("token", data.token);
   const token = useCookie('token', {
-  maxAge: 60 * 60 * 24 * 7,
-  path: '/',
-  sameSite: 'lax',
-});
-token.value = data.token;
+    maxAge: 60 * 60 * 24 * 7,
+    path: '/',
+    sameSite: 'lax',
+  });
+  token.value = data.token;
 
- useToastify("Login successfully", {
+  useToastify("Login successfully", {
     autoClose: 2000,
     position: ToastifyOption.POSITION.BOTTOM_RIGHT,
     type: ToastifyOption.TYPE.SUCCESS,
   });
-  // await fetchUserInfo();
+  await fetchUserInfo();
   emit('login-success');
 });
 
-// const fetchUserInfo = (async () => {
-//     try {
-//       const { data, status, message } = await useAsyncFetch('GET', '/api/v1/users/user');
-//       console.log("User data fetched successfully:", data);
-//        console.log("Status:", status); 
-//        console.log("username:", data.user.firstName);
-//       localStorage.setItem("userName", data.user.firstName);
-      
-//       //  userName.value = data.user.firstName;
-//       // if (status !== 'error' && data?.firstName) {
-//       //   userName.value = data.firstName;   
-//       //   localStorage.setItem("user", data.firstName);   
-//       // } else {
-//       //   console.log("Error:", message);
-//       // }
-//     } catch (error) {
-//       console.error("Error fetching user data:", error);
-//     }
-//   }
-// );
+const fetchUserInfo = async () => {
+  try {
+    const { data, status, message } = await useAsyncFetch('GET', '/api/v1/users/user');
+    console.log("User data fetched successfully:", data);
+    console.log("Status:", status);
+    console.log("username:", data.user.firstName);
+    localStorage.setItem("userName", data.user.firstName);
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+};
+
 
 
 </script>
@@ -114,19 +107,18 @@ token.value = data.token;
           <p v-if="errors.password" class="text-[#820a0a] text-sm">{{ errors.password }}</p>
         </div>
 
- 
         <div class="w-full text-right mb-3">
-           <button type="button" @click="showForgetPassword = true" class="font-cairo">Forget password ?</button>
+          <button type="button" @click="switchToForgetPassword" class="font-cairo">Forget password ?</button>
         </div>
-       
+
         <Button type="submit" buttonName="Login" class="w-full" />
 
         <p>Don't have an account? <button @click="emit('switch-to-signup')" class="underline">Sign Up</button></p>
       </Form>
     </AuthLayout>
 
-     <div v-if="showForgetPassword" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div v-if="showForgetPassword" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <ForgetPassword @close="closeModal" @switch-to-login="switchToLogin" />
-     </div>
+    </div>
   </div>
 </template>

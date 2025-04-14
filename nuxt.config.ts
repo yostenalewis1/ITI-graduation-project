@@ -5,7 +5,8 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/ui",
     "@vee-validate/nuxt",
-    "nuxt-toastify"
+    "nuxt-toastify",
+    '@pinia/nuxt',
   ],
 
   runtimeConfig: {
