@@ -31,11 +31,11 @@ const saveForLater = () => {
 
 
 <template>
-  <div class=" mx-5 flex flex-col justify-srart md:flex-row gap-2">
+  <div class=" mx-8 flex flex-col justify-srart items-center md:flex-row gap-4">
     
-    <img :src="image" alt="flower-img" class="w-2/12 h-fit object-cover rounded-3xl m-3 md:m-6" />
+    <img :src="image" alt="flower-img" class="w-1/12 h-fit object-cover rounded-3xl m-3 md:m-6" />
     
-    <div class="w-8/12 flex flex-col justify-center gap-6 p-3 md:py-4 md:px-0">
+    <div class="w-10/12 flex flex-col justify-center gap-3 p-3 md:py-4 md:px-0">
       <div class="flex justify-between">
         <h1 class="text-xl md:text-2xl font-bold text-violet-950 font-cairo">{{ title }}</h1>
         <p class="w-1/4 text-indigo-950 text-lg  text-right pr-5">{{ price }} LE</p>

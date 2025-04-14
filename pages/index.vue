@@ -38,19 +38,19 @@ const offerData = [
 </script>
 <template>
   <!-- Hero Section -->
-  <div class="relative min-h-screen bg-[url('../assets/Hero-img.png')] bg-cover bg-center flex items-center">
+  <div class="relative min-h-screen bg-[url('../assets/main-background.jpg')] bg-cover bg-center flex items-center">
     
     <div class="top-5 sm:top-2  md:top-12 absolute inset-0 md:px-16 inline-flex flex-col justify-center gap-10 items-center md:items-start">
-        <div class="max-w-[614px] text-3xl md:text-5xl md:leading-[80px] text-teal-50 font-bold text-center md:text-left ">
+        <div class="max-w-[614px] text-3xl md:text-5xl md:leading-[80px] text-violet-950 font-bold text-center md:text-left ">
           Fresh Flowers for Any Occasion 
        </div>
 
-        <div class=" text-teal-50  text-[22px] md:text-[28px] text-center md:text-left font-light font-cairo w-[90%] lg:w-[850px] leading-[40px] md:leading-[50px] ">
+        <div class=" text-violet-950 text-[22px] md:text-[28px] text-center md:text-left font-light font-cairo w-[40%]  leading-[40px] md:leading-[50px] ">
           Bringing nature’s beauty to your doorstep with elegant and fresh floral arrangements.
         </div>
 
-        <div class="w-[80%]  md:w-[545px] py-2 md:px-32 md:py-3 bg-white rounded-2xl inline-flex justify-center items-center gap-2">
-            <button class="text-center text-[#962360] text-3xl font-cairo">Start Shopping </button>
+        <div class="w-[80%]  md:w-[545px] py-2 md:px-32 md:py-3 bg-violet-950 rounded-2xl inline-flex justify-center items-center gap-2">
+            <button class="text-center text-white text-3xl font-cairo">Start Shopping </button>
         </div> 
     </div>
   </div>

@@ -6,8 +6,7 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@vee-validate/nuxt",
     "nuxt-toastify",
-    '@pinia/nuxt',
-  ],
+    ],
 
   runtimeConfig: {
     public: {

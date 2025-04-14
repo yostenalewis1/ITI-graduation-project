@@ -1,7 +1,6 @@
 <script setup>
  import {useForm , useField} from "vee-validate";
  import * as yup from "yup";
- import axios from "axios";
 
  
 const emit = defineEmits(['close', 'switch-to-login']);

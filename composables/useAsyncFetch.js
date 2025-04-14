@@ -10,7 +10,7 @@ export const useAsyncFetch = async (method, endpoint, body = null) => {
                 'Content-Type': 'application/json',
                 authorization: `Bearer ${token.value}`,
             },
-            baseURL: config.public.baseUrl,
+            baseURL: config.public.baseUrl || "https://flower-shop-db.vercel.app",
         };
 
        
