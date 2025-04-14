@@ -1,12 +1,12 @@
 <template>
 
-<div class="relative w-full min-h-screen bg-[url('../assets/about-us-cover.png')] bg-cover bg-center mb-3 md:mb-10">
+<div class="relative w-full min-h-screen bg-[url('../assets/about-us-cover.png')] bg-cover bg-center -mb-10 md:mb-10">
       
       
       <div class="absolute inset-0 bg-slate-900 bg-opacity-35 z-0"></div>
        
        <img src="../assets/Rectangle.png" alt="Rectangle" class="hidden md:block absolute inset-0 top-[300px] " />
-    <div class="w-full absolute inset-0 top-36 md:top-28 flex flex-col justify-center items-center gap-2">
+    <div class="w-full absolute inset-0 top-14 mb-10  md:top-28 flex flex-col justify-center items-center gap-2">
         <h1 class="text-indigo-950 text-5xl font-semibolde font-cairo"> Contact Us</h1>
         <p class="text-indigo-950 font-normal text-lg font-cairo md:w-[800px] text-center">We love hearing from our customers! If you have any questions, suggestions, or feedback, Please feel free to get in touch.</p>
     
