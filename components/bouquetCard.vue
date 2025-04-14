@@ -7,14 +7,18 @@ const products = ref([]);
 const loading = ref(false);
 const error = ref(null);
 const isEmpty = ref(false);
+const page = ref(1)
+const limit = ref(6)
 
 const getProducts = async () => {
   loading.value = true;
   error.value = null;
   isEmpty.value = false;
 
+ 
+
   try {
-    const { data, status, message } = await useAsyncFetch("GET", "/api/v1/products/all/?page=1&limit=12");
+    const { data, status, message } = await useAsyncFetch("GET",`/api/v1/products/all/?page=${page.value}&limit=${limit.value}`);
 
     if (status === 'success') {
       products.value = data.products.map(product => ({
@@ -63,6 +67,10 @@ const addToCart = async (productId, quantity=1) => {
     console.error('Failed to add item to cart:', err.message);
   }
 };
+
+watch(page, () => {
+  getProducts();
+});
 </script>
 
 <template>
@@ -99,5 +107,13 @@ const addToCart = async (productId, quantity=1) => {
         </div>
       </div>
     </div>
+  <div class="mt-10 mx-auto flex justify-center">
+     <UPagination 
+        v-model="page" 
+        :total="40" 
+        :items-per-page="limit" 
+        />
   </div>
+  
+    </div>
 </template>
