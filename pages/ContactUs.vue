@@ -1,65 +1,173 @@
-<template>
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import LoadingIndicator from '/components/LoadingIndicator.vue';
+import ErrorMessageIndicator from '/components/ErrorMessageIndicator.vue';
+import EmptyIndicator from '/components/EmptyIndicator.vue';
+import { useAsyncFetch } from '/composables/useAsyncFetch';
 
-<div class="relative w-full min-h-screen bg-[url('../assets/about-us-cover.png')] bg-cover bg-center -mb-10 md:mb-10">
-      
-      
-      <div class="absolute inset-0 bg-slate-900 bg-opacity-35 z-0"></div>
-       
-       <img src="../assets/Rectangle.png" alt="Rectangle" class="hidden md:block absolute inset-0 top-[300px] " />
-    <div class="w-full absolute inset-0 top-14 mb-10  md:top-28 flex flex-col justify-center items-center gap-2">
-        <h1 class="text-indigo-950 text-5xl font-semibolde font-cairo"> Contact Us</h1>
-        <p class="text-indigo-950 font-normal text-lg font-cairo md:w-[800px] text-center">We love hearing from our customers! If you have any questions, suggestions, or feedback, Please feel free to get in touch.</p>
-    
-    
-        <div class="flex justify-evenly items-center w-full"> 
+const categories = ref([]);
+const selectedFilter = ref('ALL');
+const filters = ref(['ALL']);
+const products = ref([]);
 
-            <div class="hidden md:flex flex-col gap-5"> 
-                <div class="flex flex-row gap-2">
-                      <div class=" rounded-full p-3 bg-[#26103D]">
-                        <img src="../assets/email.svg" alt="phone" class="w-6 h-6" />
-                      </div>
-                     
-                      <div class="flex flex-col">
-                         <h2 class="font-cairo font-bold text-md">Email</h2>
-                         <p  class="font-cairo" >Rozato@gmail.com</p>
-                      </div>
-                    
-                  </div>
-                  
-                  <div class="flex flex-row gap-2">
-                      <div class=" rounded-full p-3 bg-[#26103D] items-center">
-                        <img src="../assets/phone.svg" alt="phone" class="w-6 h-6" />
-                      </div>
-                     
-                      <div class="flex flex-col">
-                         <h2  class="font-cairo font-bold text-md" >Phone</h2>
-                         <p  class="font-cairo">+010-151-5114</p>
-                      </div>
-                    
-                  </div>
-            </div>
+const loading = ref(false);
+const error = ref(null);
+const isEmpty = ref(false);
 
+const router = useRouter();
 
-            <div class="bg-zinc-300 w-[95%] md:w-full  p-6 rounded-s-3xl rounded-t-3xl shadow-lg mt-6 max-w-md relative pl-10">
-                <h2 class="text-3xl font-semibold text-indigo-950 font-cairo">Get in Touch!</h2>
-                   <div class="flex flex-col">
-                  
-                        <input  type="Full name" placeholder="Full name" class="w-full h-12 bg-transparent border-b-2 border-white text-indigo-950 text-lg font-cairo focus:outline-none" />
-                        <input  type="email" placeholder="Email" class="w-full h-12 bg-transparent border-b-2 border-white text-indigo-950 text-lg font-cairo focus:outline-none" />
-                        <input  type="phone" placeholder="Phone" class="w-full h-12 bg-transparent border-b-2 border-white text-indigo-950 text-lg font-cairo focus:outline-none" />
-                        <textarea 
-                            placeholder="Write something" 
-                            class="w-full h-32 bg-transparent border-b-2 border-white text-indigo-950 text-lg font-cairo focus:outline-none resize-none"
-                        ></textarea>
-                        
-                        <button class="w-40 mt-5 py-2 bg-[#26103D] rounded-2xl justify-center items-center gap-2">
-                            <p class="text-white font-cairo"> Send message </p>
-                      </button>
+const fetchCategories = async () => {
+  loading.value = true;
+  error.value = null;
+  isEmpty.value = false;
+
+  try {
+    const { data, status, message } = await useAsyncFetch('GET', '/api/v1/categories/');
+
+    if (status === 'success' && data.categories.length > 0) {
+        console.log(data);
         
-                   </div>
-             </div>
-         </div>
+      categories.value = data.categories.map(item => ({
+        id: item._id,
+        name: item.name,
+        type: item.name,
+        image: item.image
+      }));
+      
+      filters.value = ['ALL', ...data.categories.map(item => item.name)];
+      isEmpty.value = false;
+    } else {
+      isEmpty.value = true;
+    }
+  } catch (err) {
+    error.value = err.message || 'Failed to fetch categories.';
+  } finally {
+    loading.value = false;
+  }
+};
+
+const fetchProducts = async (categoryId) => {
+  loading.value = true;
+  error.value = null;
+  isEmpty.value = false;
+
+  try {
+    const { data, status, message } = await useAsyncFetch('GET', `/api/v1/categories/${categoryId}/products`);
+
+    if (status === 'success' && data.products.length > 0) {
+      products.value = data.products;
+      isEmpty.value = false;
+    } else {
+      isEmpty.value = true;
+    }
+  } catch (err) {
+    error.value = err.message || 'Failed to fetch products.';
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(fetchCategories);
+
+const filteredCategories = computed(() => {
+  return selectedFilter.value === 'ALL'
+    ? categories.value
+    : categories.value.filter(c => c.type === selectedFilter.value);
+});
+
+const handleFilterClick = (category) => {
+    console.log(category);
+    
+  selectedFilter.value = category;
+  if (category !== 'ALL') {
+    const selectedCategory = categories.value.find(c => c.name === category);
+    console.log(selectedCategory);
+    
+    if (selectedCategory) {
+      fetchProducts(selectedCategory.id);
+    }
+  } else {
+    products.value = [];
+  }
+};
+</script>
+
+<template>
+  <!-- Show only the loader when loading -->
+  <div v-if="loading" class="flex justify-center items-center min-h-screen">
+    <LoadingIndicator />
+  </div>
+
+  <!-- Main content -->
+  <div v-else class="mt-24">
+    <!-- Heading -->
+    <h1 class="text-center text-4xl font-semibold text-[#26103d] mb-6">CATEGORIES</h1>
+
+    <!-- Filters -->
+    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-12 mb-10 text-lg text-[#26103d]">
+      <button 
+        v-for="category in filters" 
+        :key="category.id"
+        @click="handleFilterClick(category)"
+        :class="[ 
+          'font-bold', 
+          selectedFilter === category ? 'underline' : '', 
+          'transition-colors duration-300 hover:text-purple-700'
+        ]"
+      >
+        {{ category }}
+      </button>
     </div>
-</div>
-  </template>
-  
+
+    <!-- Error -->
+    <div v-if="error">
+      <ErrorMessageIndicator :message="error" />
+    </div>
+
+    <!-- Empty -->
+    <div v-else-if="isEmpty">
+      <EmptyIndicator />
+    </div>
+
+    <!-- Category Cards -->
+    <div 
+      v-else 
+      class="flex flex-wrap px-10 gap-5 justify-center items-center"
+    >
+      <div v-if="selectedFilter==='ALL'"
+        v-for="item in filteredCategories" 
+        :key="item.name"
+         class="flex flex-col w-[20%]  text-center cursor-pointer"
+      >
+      
+        <div @click="handleFilterClick(item.name)" class=" p-3 rounded-full border-2">
+            <img :src="item.image" alt="category image" class="rounded-full w-[100%] h-fit object-cover mx-auto " />
+        </div>
+        <p class="mt-2 text-lg font-bold text-indigo-950">{{ item.name }}</p>
+      </div>
+    </div>
+
+    <!-- Product Cards -->
+
+    <div v-if="products.length > 0"  class="flex flex-row flex-wrap gap-3">
+      <div v-for="(product, index) in products" :key="product._id" class="flex flex-col w-[350px] pb-5 rounded-xl border-2 gap-4">
+        <img :src="product.image" alt="Bouquet" class="rounded-t-xl w-full h-fit object-cover p-5" />
+        <p class="text-indigo-950 text-sm pl-5">{{ product.title }}</p>
+        <div class="flex flex-row justify-between px-5">
+          <p class="text-indigo-950 text-md font-bold">Price : {{ product.price }} LE</p>
+          <div class="flex gap-4">
+            <!-- @click="toggleFavorite(product)" -->
+            <button >
+              <img :src="product.isFavorite ? fillHeart : heart" class="w-6 h-6" />
+            </button>
+            <!-- @click="addToCart(product._id)" -->
+            <button >
+              <img src="../assets/Vector (3).svg" class="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
