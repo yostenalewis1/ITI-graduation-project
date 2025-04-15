@@ -38,7 +38,7 @@ const offerData = [
 </script>
 <template>
   <!-- Hero Section -->
-  <div class="relative min-h-screen bg-[url('../assets/main-background.jpg')] bg-cover bg-center flex items-center">
+  <div class="relative min-h-screen lg:bg-[url('../assets/main-background.jpg')] bg-cover bg-center flex items-center ">
     
     <div class="top-5 sm:top-2  md:top-12 absolute inset-0 md:px-16 inline-flex flex-col justify-center gap-10 items-center md:items-start">
         <div class="max-w-[614px] text-3xl md:text-5xl md:leading-[80px] text-violet-950 font-bold text-center md:text-left ">
