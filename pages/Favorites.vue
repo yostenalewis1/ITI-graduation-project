@@ -1,4 +1,8 @@
 <script setup>
+definePageMeta({
+  middleware: 'auth',
+})
+
 import { ref, onMounted } from 'vue';
 import fillHeart from "../assets/Fill-heart.svg";
 

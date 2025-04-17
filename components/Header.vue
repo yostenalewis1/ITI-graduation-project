@@ -45,6 +45,9 @@ const toggleMenu = () => {
 const onLoginSuccess = () => {
   isLoggedIn.value = true;
   showLogin.value = false;
+  if (typeof window !== 'undefined') {
+  localStorage.setItem('isLoggedIn', 'true');
+}
 };
 
 const logout = () => {
@@ -53,6 +56,7 @@ const logout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
+    localStorage.removeItem('isLoggedIn')
   }
    const token = useCookie('token');
    token.value = null; 

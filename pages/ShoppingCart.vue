@@ -1,4 +1,8 @@
 <script setup>
+definePageMeta({
+  middleware: 'auth',
+})
+
 import { ref, onMounted } from 'vue';
 import CartCard from "../components/cartCard.vue";
 import { useCart } from '../composables/useCart.js';

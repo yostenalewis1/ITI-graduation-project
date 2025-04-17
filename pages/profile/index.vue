@@ -5,6 +5,7 @@ const router = useRouter();
 
 definePageMeta({
   layout: 'profile',
+  middleware: 'auth'
 });
 
  
