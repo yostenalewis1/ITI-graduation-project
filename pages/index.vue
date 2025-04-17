@@ -45,7 +45,7 @@ const offerData = [
           Fresh Flowers for Any Occasion 
        </div>
 
-        <div class=" text-violet-950 text-[22px] md:text-[28px] text-center md:text-left font-light font-cairo w-[40%]  leading-[40px] md:leading-[50px] ">
+        <div class=" text-violet-950 text-[22px] md:text-[28px] text-center md:text-left font-light font-cairo sm:w-[40%] px-4 leading-[40px] md:leading-[50px] ">
           Bringing nature’s beauty to your doorstep with elegant and fresh floral arrangements.
         </div>
 

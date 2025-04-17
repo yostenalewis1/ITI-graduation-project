@@ -1,84 +1,38 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import CartCard from "../components/cartCard.vue";
+import { useCart } from '../composables/useCart.js';
+import { useAsyncFetch } from '../composables/useAsyncFetch.js'; // Adjust the import path
+import { useWishlist } from '../composables/useWishlist.js';
 
-const cartItems = ref([]);
-const loading = ref(false);
-const error = ref(null);
-const isEmpty = ref(false);
+const { loading, error, isEmpty, cartItems, cartData, fetchCart, deleteItem, clearCart ,updateQuantity} = useCart();
+const { addToFavorites } = useWishlist();
+const couponCode = ref('');
 
-const fetchCart = async () => {
-  loading.value = true;
+const applyCoupon = async () => {
   try {
-    const { data, status,err } = await useAsyncFetch("GET", "/api/v1/cart");
-    if (status === "success") {
-      cartItems.value = data.cart.products;
-      isEmpty.value = cartItems.value.length === 0;
+    const { data: couponData, status: couponStatus } = await useAsyncFetch('POST', '/api/v1/cart/applyCoupon', { code: couponCode.value });
+    if (couponStatus === 'success') {
+      couponCode.value = '';
+      // Assuming the API returns updated cart data with the discount applied
+      // cartData.value = couponData.cart;
     } else {
-      error.value = "Failed to fetch cart data";
+      throw new Error('Failed to apply coupon');
     }
   } catch (err) {
-    error.value = "Error fetching cart data";
-    console.error("Error fetching cart data:", err);
-  }
-  loading.value = false;
-};
-
-onMounted(() => {
-  fetchCart();
-});
-
-const updateQuantity = async (id, newQuantity) => {
-  if (newQuantity < 1) {
-    await deleteItem(id);
-    return;
-  }
-  try {
-    const { status } = await useAsyncFetch("PUT", `/api/v1/cart/${id}`, {
-      quantity: newQuantity,
-    });
-    if (status === "success") {
-      const item = cartItems.value.find((item) => item.product._id === id);
-      if (item) {
-        item.quantity = newQuantity;
-      }
-    }
-  } catch (error) {
-    console.error("Error updating quantity:", error);
+    alert('Error applying coupon: ' + err.message);
   }
 };
 
-const deleteItem = async (id) => {
-  cartItems.value = cartItems.value.filter((item) => item.product._id !== id);
-  isEmpty.value = cartItems.value.length === 0;
+onMounted(async () => {
+  console.log("Before fetchCart, cartData:", cartData);
+  await fetchCart();
+  console.log("After fetchCart, cartData:", cartData);});
 
-  try {
-    const { status } = await useAsyncFetch("DELETE", `/api/v1/cart/${id}`);
-    if (status !== "success") {
-      error.value = "Failed to delete item";
-    }
-  } catch (error) {
-    console.error("Error deleting item:", error);
-  }
-};
-
-const clearCart = async () => {
-  try {
-    const { status } = await useAsyncFetch("DELETE", "/api/v1/cart");
-    if (status === "success") {
-      cartItems.value = [];
-      isEmpty.value = true;
-    } else {
-      error.value = "Failed to clear the cart";
-    }
-  } catch (error) {
-    console.error("Error clearing cart:", error);
-    error.value = "Error clearing cart";
-  }
-};
-
-const saveForLater = (id) => {
-  console.log(`Save item ${id} for later`);
+const saveForLater = (product) => {
+  addToFavorites(product);
+  deleteItem(product._id);
+  console.log(`Save item ${product.id} for later`);
 };
 </script>
 
@@ -89,7 +43,6 @@ const saveForLater = (id) => {
     class="fixed inset-0 flex items-center justify-center z-50 bg-stone-300"
   >
     <LoadingIndicator />
-
   </div>
 
   <!-- Error State -->
@@ -97,7 +50,7 @@ const saveForLater = (id) => {
     v-if="error"
     class="w-full top-28 relative flex flex-col-reverse md:flex-row gap-5 mb-40 px-10 justify-center items-stretch text-red-500"
   >
-    <p>{{ error }}</p>
+    <ErrorMessage />
   </div>
 
   <!-- Main Content -->
@@ -116,39 +69,33 @@ const saveForLater = (id) => {
         <div class="flex justify-between container px-10 items-center mt-3">
           <h1 class="text-indigo-950 text-2xl font-bold">Shopping Cart</h1>
         </div>
-        <hr
-          class="border-t border-indigo-900 w-[90%] mx-auto mt-3 opacity-50"
-        />
+        <hr class="border-t border-indigo-900 w-[90%] mx-auto mt-3 opacity-50" />
 
         <div v-if="!isEmpty">
           <CartCard
             v-for="item in cartItems"
-            :key="item.product._id"
+            :key="item._id"
             :id="item.product._id"
             :image="item.product.image"
             :title="item.product.title"
             :quantity="item.quantity"
             :price="item.price"
             :stock="item.product.stock"
+            :product="item.product"
             @update-quantity="updateQuantity"
             @delete-item="deleteItem"
             @save-for-later="saveForLater"
           />
           <div class="text-right p-3">
-            <p
-              class="text-xl md:text-2xl font-normal font-cairo text-indigo-950"
-            >
-              Subtotal ({{ cartItems.length }} item{{
-                cartItems.length > 1 ? "s" : ""
-              }}) :
+            <p class="text-xl md:text-2xl font-normal font-cairo text-indigo-950">
+              Subtotal ({{ cartItems.length }} item{{ cartItems.length > 1 ? "s" : "" }}) :
               <span class="font-bold">
                 {{
-                  cartItems.reduce(
-                    (total, item) => total + item.price * item.quantity,
-                    0
-                  )
-                }}
-                EGP
+        cartItems.reduce(
+          (total, item) => total + item.price * item.quantity,
+          0
+        ) 
+      }} EGP
               </span>
             </p>
           </div>
@@ -157,12 +104,9 @@ const saveForLater = (id) => {
         <!-- Empty State -->
         <div v-else class="container px-3 mx-auto my-2 w-[90%] text-center">
           <img src="~/assets/empty-cart.svg" alt="No items" class="empty-image mx-auto" />
-
           <p class="text-indigo-950 text-2xl">Your cart is empty.</p>
           <NuxtLink to="/product">
-            <button
-              class="bg-violet-950 mx-auto py-2 px-6 rounded-lg text-white font-bold font-cairo my-5 items-center text-center"
-            >
+            <button class="bg-violet-950 mx-auto py-2 px-6 rounded-lg text-white font-bold font-cairo my-5 items-center text-center">
               Order now
             </button>
           </NuxtLink>
@@ -176,26 +120,23 @@ const saveForLater = (id) => {
       class="bg-[url('../assets/about-us-cover.png')] bg-cover bg-center h-auto md:h-auto w-full md:w-[25%] rounded-lg text-center pt-5 flex flex-col justify-around gap-5"
     >
       <div class="flex flex-col justify-center items-center gap-4">
-        <h1 class="text-indigo-950 text-lg font-cairo">Total amount</h1>
-        <p class="text-indigo-900 text-2xl font-bold font-cairo">
-          {{
-            cartItems.reduce(
-              (total, item) => total + item.price * item.quantity,
-              0
-            ) + 20
-          }}
-          LE
-        </p>
+        <h1 class="text-indigo-950 text-lg font-cairo">Order Summary</h1>
+        
+        <!-- Coupon Code Section -->
+        <div class="lg:relative md:static flex flex-col  lg:flex-row  w-[90%] mx-auto justify-center items-center gap-2">
+          <input type="text" v-model="couponCode" placeholder="Enter coupon code" class="pl-1 pr-7 w-[100%] h-10 border-2 border-indigo-900 rounded px-2   focus:outline-none text-indigo-950 bg-white">
+          <button @click="applyCoupon" class="lg:absolute md:static right-0 w-40 h-10 bg-violet-950 text-white rounded hover:bg-[#361857]">Apply</button>
+        </div>
       </div>
       <hr class="border-t border-indigo-900 w-[90%] mx-auto opacity-50" />
 
       <h1 class="text-neutral-700 text-sm text-left pl-5 font-cairo">
-        Order summary
+        Items
       </h1>
 
       <div
         v-for="item in cartItems"
-        :key="item.product._id"
+        :key="item._id"
         class="flex flex-row justify-between px-5"
       >
         <p class="text-md text-black font-cairo">{{ item.product.title }}</p>
@@ -212,9 +153,8 @@ const saveForLater = (id) => {
             cartItems.reduce(
               (total, item) => total + item.price * item.quantity,
               0
-            )
-          }}
-          EGP
+            ) 
+          }} EGP
         </p>
       </div>
       <hr class="border-t border-indigo-900 w-[90%] mx-auto opacity-50" />
@@ -230,12 +170,13 @@ const saveForLater = (id) => {
         <p class="text-indigo-900 text-xl font-bold font-cairo">Total</p>
         <p class="text-indigo-950 text-xl font-cairo">
           {{
-            cartItems.reduce(
-              (total, item) => total + item.price * item.quantity,
-              0
-            ) + 20
-          }}
-          EGP
+        ((
+          cartItems.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+          ) 
+        ) * (1 - (cartData.discount || 0) / 100) )+20
+      }} EGP
         </p>
       </div>
 

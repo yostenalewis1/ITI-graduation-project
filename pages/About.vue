@@ -1,16 +1,16 @@
 
 <template>
     <div
-      class="relative w-full bg-cover pt-[150px] bg-[url('../assets/about.png')] pb-48"
+      class="relative w-full bg-cover pt-[150px] bg-[url('../assets/about.svg')] pb-20"
     >
   
   
-      <div class="px-28 py-24 text-[#26103d] md:text-white text-center md:text-left">
+      <div class="lg:px-28 p-5 py-24  md:text-white text-center md:text-left">
         <h2 class="text-[50px] mb-6 font-cairo">About Us</h2>
         <p class=" leading-9  max-w-4xl mx-auto md:mx-0 text-xl">
-          Flowers speak the language of love, care, and joy. At Floral Haven, we curate<br>
-          exquisite floral arrangements that bring happiness to every<br>
-          moment. Whether you need a bouquet for a special occasion or just to <br>
+          Flowers speak the language of love, care, and joy. At Floral Haven, we curate
+          exquisite floral arrangements that bring happiness to every
+          moment. Whether you need a bouquet for a special occasion or just to 
           brighten someone's day, we have the perfect flowers for you.
         </p>
       </div>
@@ -39,9 +39,9 @@
       </div>
   
       
-      <section class="mt-52 px-28 -mb-36 text-[#26103d] md:text-white text-center md:text-right">
+      <section class="mt-40 md:px-28 px-5  md:text-white text-center md:text-right">
         <h2 class="text-[50px] mb-6 font-cairo">Why Choose Us?</h2>
-        <ul class="text-[#F1F1F1] leading-9 text-xl max-w-4xl mx-auto md:mx-0 text-left">
+        <ul class="text-[#F1F1F1] leading-9 text-xl max-w-4xl mx-auto md:mx-0 text-center mt-20 md:text-left">
           <li>Our website is designed to be intuitive and easy to navigate for users of all ages and abilities,</li>
           <li>We prioritize your safety and use advanced encryption technology to protect  your personal<br> information and payment details,</li>
           <li>We offer competitive rates and exclusive discounts on flowers items, ensuring you get the best deals.</li>

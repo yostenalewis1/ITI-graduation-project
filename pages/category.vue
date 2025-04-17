@@ -65,13 +65,19 @@ const fetchProducts = async (categoryId) => {
     );
 
     if (status === "success" && data.products.length > 0) {
-      products.value = data.products;
-      isEmpty.value = false;
-      products.value = data.products.map((product) => ({
-        ...product,
-        isFavorite: favoriteIds.value.includes(product._id),
-      }));
+      products.value = data.products.map((product) => {
+        // Calculate the average rating for each product
+        const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
+        const averageRating = product.reviews.length ? (totalRating / product.reviews.length).toFixed(1) : 0;
 
+        return {
+          ...product,
+          isFavorite: favoriteIds.value.includes(product._id),
+          averageRating
+        };
+      });
+
+      isEmpty.value = false;
     } else {
       isEmpty.value = true;
     }
@@ -85,6 +91,13 @@ onMounted(async () => {
   await fetchFavorites();
   fetchCategories();
 });
+
+const navigateToProductDetail = (productId) => {
+  console.log('Navigating to product:', productId); 
+  router.push({
+    path: `/product-detail/${productId}`
+  });
+} 
 
 const filteredCategories = computed(() => {
   return selectedFilter.value === "ALL"
@@ -133,7 +146,7 @@ const handleFilterClick = (category) => {
 
     <!-- Filters -->
     <div
-      class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-12 mb-10 text-lg text-[#26103d]"
+      class="flex flex-wrap  justify-center items-center gap-4 sm:gap-12 mb-10 text-lg text-[#26103d]"
     >
       <button
         v-for="category in filters"
@@ -160,12 +173,12 @@ const handleFilterClick = (category) => {
     </div>
 
     <!-- Category Cards -->
-    <div v-else class="flex flex-wrap px-10 gap-5 justify-center items-center pb-5">
+    <div v-else class="flex flex-col sm:flex-row flex-wrap px-10 gap-5 justify-center items-center pb-5">
       <div
         v-if="selectedFilter === 'ALL'"
         v-for="item in filteredCategories"
         :key="item.name"
-        class="flex flex-col w-[20%] text-center cursor-pointer"
+        class="flex flex-col sm:w-[20%] w-[80%] text-center cursor-pointer  hover:scale-[102%]"
       >
         <div
           @click="handleFilterClick(item.name)"
@@ -183,18 +196,27 @@ const handleFilterClick = (category) => {
 
     <!-- Product Cards -->
 
-    <div v-if="products.length > 0" class="flex flex-row flex-wrap gap-3 justify-center my-4 pb-5">
+    <div v-if="products.length > 0" class="flex flex-row flex-wrap gap-3 justify-center my-4 pb-5 ">
       <div
         v-for="(product, index) in products"
         :key="product._id"
-        class="flex flex-col w-[350px] pb-5 rounded-xl border-2 gap-4"
+        class="flex flex-col w-[350px] pb-5 rounded-xl border-2 gap-4 hover:shadow-md hover:scale-[102%]"
+        @click="navigateToProductDetail(product._id)"
       >
         <img
           :src="product.image"
           alt="Bouquet"
           class="rounded-t-xl w-full h-fit object-cover p-5"
         />
-        <p class="text-indigo-950 text-sm pl-5">{{ product.title }}</p>
+        <div class="flex flex-row sn:flex-col justify-between items-center  px-5">
+          <p class="text-indigo-950 font-bold text-sm">{{ product.title }}</p>
+        <div class="flex justify-end items-center text-indigo-950 text-lg ">
+          <div class="flex text-yellow-500">
+            <span v-for="n in Math.floor(product.averageRating)" :key="n">★</span>
+            <span v-for="n in 5 - Math.floor(product.averageRating)" :key="n">☆</span>
+          </div>
+        </div>
+        </div>
         <div class="flex flex-row justify-between px-5">
           <p class="text-indigo-950 text-md font-bold">
             Price : {{ product.price }} LE

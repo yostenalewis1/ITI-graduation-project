@@ -1,4 +1,10 @@
 <template>
+  <div
+    v-if="loading"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-stone-300"
+  >
+    <LoadingIndicator />
+  </div>
   <div class="w-full top-28 relative flex flex-col md:flex-row gap-5 mb-40 px-10 justify-center items-stretch">
     <div class="min-w-[60%] lg:text-left sm:text-center border-2 border-indigo-800 rounded-lg flex flex-col px-10">
       <div class="flex flex-row w-full items-center justify-center gap-2 pt-3">
@@ -73,7 +79,7 @@
     <div class="bg-[url('../assets/about-us-cover.png')] bg-cover bg-center h-auto md:h-auto min-w-[40%] rounded-lg text-center pt-5 flex flex-col justify-between gap-5 md:gap-0">
       <div class="flex flex-col justify-center items-center gap-4">
         <h1 class="text-indigo-950 text-sm font-cairo">Total amount</h1>
-        <p class="text-indigo-900 text-2xl font-bold font-cairo">{{ totalAmount }} LE</p>
+        <p class="text-indigo-900 text-2xl font-bold font-cairo">{{ cartData.total }} LE</p>
       </div>
       <hr class="border-t border-indigo-900 w-[90%] mx-auto opacity-50" />
 
@@ -87,7 +93,7 @@
 
       <div class="flex flex-row justify-between px-5">
         <p class="text-md text-black font-cairo">Subtotal</p>
-        <p class="text-md text-black font-cairo">{{ subtotal }} EGP</p>
+        <p class="text-md text-black font-cairo">{{ cartData.subTotal }} EGP</p>
       </div>
       <hr class="border-t border-indigo-900 w-[90%] mx-auto opacity-50" />
 
@@ -97,10 +103,16 @@
       </div>
 
       <hr class="border-t border-indigo-900 w-[90%] mx-auto opacity-50" />
+      <div class="flex flex-row justify-between px-5">
+        <p class="text-md text-black font-cairo">Discount</p>
+        <p class="text-md text-black font-cairo">{{ cartData.discount }} %</p>
+      </div>
+
+      <hr class="border-t border-indigo-900 w-[90%] mx-auto opacity-50" />
 
       <div class="flex flex-row justify-between px-5 mb-5">
         <p class="text-indigo-900 text-xl font-bold font-cairo">Total</p>
-        <p class="text-indigo-950 text-xl font-cairo">{{ totalAmount }} EGP</p>
+        <p class="text-indigo-950 text-xl font-cairo">{{ cartData.total +20}} EGP</p>
       </div>
     </div>
   </div>
@@ -114,9 +126,7 @@ import { useForm } from 'vee-validate';
 import * as yup from 'yup';
 
 const router = useRouter();
-const cartItems = ref([]);
-const subtotal = ref(0);
-const totalAmount = ref(0);
+
 
 const schema = yup.object({
   firstName: yup.string().required('First name is required').matches(/^[a-zA-Z\s]+$/, "First Name must be a string"),
@@ -138,23 +148,11 @@ const { value: mobileNumber } = useField('mobileNumber');
 const { value: details } = useField('details');
 const { value: paymentMethod, setValue: setPaymentMethod } = useField('paymentMethod');
 
-const fetchCartData = async () => {
-  try {
-    const { data, status } = await useAsyncFetch("GET", "/api/v1/cart");
-    if (status === "success") {
-      cartItems.value = data.cart.products;
-      subtotal.value = cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0);
-      totalAmount.value = subtotal.value + 20; 
-    } else {
-      console.error("Failed to fetch cart data");
-    }
-  } catch (error) {
-    console.error("Error fetching cart data:", error);
-  }
-};
+const {cartData,cartItems,loading,fetchCart}=useCart()
+
 
 onMounted(() => {
-  fetchCartData();
+  fetchCart();
 });
 
 const selectPaymentMethod = (method) => {

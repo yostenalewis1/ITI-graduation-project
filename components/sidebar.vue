@@ -16,7 +16,7 @@
         </NuxtLink>
         
 
-        <NuxtLink>
+        <NuxtLink to="/profile/userOrders">
              <div class="flex gap-2 items-center justify-center">
                  <p class="text-indigo-950 text-xl font-cairo font-bold ">All orders</p>
                  <img src="../assets/arrow.svg" alt="Arrow"  />

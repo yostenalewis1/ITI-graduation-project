@@ -1,5 +1,8 @@
+import { ref } from 'vue';
+import { useAsyncFetch } from '../composables/useAsyncFetch';
 export function useCart() {
   const cartItems = ref([]);
+  const cartData=ref({ subtotal: 0, total: 0})
   const isEmpty = ref(true);
   const loading = ref(false);
   const error = ref(null);
@@ -10,8 +13,15 @@ export function useCart() {
     try {
       const { data, status } = await useAsyncFetch("GET", "/api/v1/cart");
       if (status === "success") {
-        cartItems.value = data.cart.products;
+        cartData.value = data.cart || { subtotal: 0, total: 0 };
+        console.log(cartData);
+        
+        // cartItems.value = data.cart.products;
+        cartItems.value = data.cart.products.filter(item => item.product !== null);
+        console.log(cartItems.value);
         isEmpty.value = cartItems.value.length === 0;
+        console.log('Fetched cart items:', cartItems.value); 
+
       } else {
         error.value = "Failed to fetch cart data";
       }
@@ -108,6 +118,7 @@ export function useCart() {
     loading,
     error,
     loadproduct,
+    cartData,
     fetchCart,
     updateQuantity,
     deleteItem,

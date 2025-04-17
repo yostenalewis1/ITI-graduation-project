@@ -1,4 +1,5 @@
 <script setup>
+
 const props=defineProps({
   image: String,
   title: String,
@@ -6,7 +7,8 @@ const props=defineProps({
   color: String,
   price: Number,
   id: String,
-  stock:Number
+  stock:Number,
+  product:Object
 });
 
 const emit = defineEmits(['update-quantity', 'delete-item', 'save-for-later']);
@@ -25,7 +27,7 @@ const deleteItem = () => {
 };
 
 const saveForLater = () => {
-  emit('save-for-later', props.id);
+  emit('save-for-later', props.product);
 };
 </script>
 

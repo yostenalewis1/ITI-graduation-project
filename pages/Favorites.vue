@@ -4,10 +4,17 @@ import fillHeart from "../assets/Fill-heart.svg";
 
 const { favoriteProducts, loading, error, fetchFavorites, removeFromFavorites } = useWishlist();
 const {  loadproduct,addToCart} = useCart();
+const router=useRouter()
 
 onMounted(() => {
   fetchFavorites();
 });
+const navigateToProductDetail = (productId) => {
+  console.log('Navigating to product:', productId); 
+  router.push({
+    path: `/product-detail/${productId}`
+  });
+}
 </script>
 
 <template>
@@ -27,12 +34,13 @@ onMounted(() => {
     <div v-else-if="favoriteProducts.length === 0">
       <EmptyIndicator />
     </div>
-    <div class="flex gap-4 justify-center items-center w-[80%] mx-auto">
+    <div class=" md:flex-row  items-center  px-10 flex flex-row flex-wrap gap-3 justify-center my-4 pb-5">
       <!-- Error -->
     <div
         v-for="(product, index) in favoriteProducts"
         :key="index"
         class="flex flex-col w-[350px] p-5 rounded-xl border-2 gap-4 hover:shadow-md hover:scale-[102%]"
+        @click="navigateToProductDetail(product._id)"
         
       >
         <img
@@ -40,7 +48,7 @@ onMounted(() => {
           alt="Bouquet"
           class="rounded-3xl w-full h-fit object-cover"
         />
-        <p class="text-indigo-950 text-sm pl-5">{{ product.title }}</p>
+        <p class="text-indigo-950 font-bold text-sm pl-5">{{ product.title }}</p>
         <div class="flex flex-row justify-between px-5">
           <div class="flex gap-1 items-end me-4">
             <p class="text-xl font-bold text-indigo-950">
