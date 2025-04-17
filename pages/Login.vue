@@ -56,6 +56,7 @@ const onSubmit = handleSubmit(async (values) => {
     });
     return;
   }
+  const {switchToLogin ,switchToPasswordReset}=useAuthModal()
 
   console.log("login success:", data);
   localStorage.setItem("user", values.email);
@@ -118,7 +119,7 @@ const fetchUserInfo = async () => {
     </AuthLayout>
 
     <div v-if="showForgetPassword" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <ForgetPassword @close="closeModal" @switch-to-login="switchToLogin" />
+      <ForgetPassword @close="closeModal" @switch-to-login="switchToForgetPassword" />
     </div>
   </div>
 </template>

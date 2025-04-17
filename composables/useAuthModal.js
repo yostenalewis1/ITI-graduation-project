@@ -55,7 +55,7 @@ const switchToPasswordReset = () => {
     router.push({ query: { auth: "passwordReset" } });
     passwordReset.value = true;
 }
-const openSetNewPassword = () => {
+const switchSetNewPassword = () => {
     router.push({ query: { auth: "setNewPassword" } });
     setNewPassword.value = true;
 }
@@ -66,14 +66,16 @@ const openSetNewPassword = () => {
     showLogin,
     showForgetPassword,
     passwordReset,
+    setNewPassword,
     switchToSignup,
     switchToLogin,
     switchToForgetPassword,
     switchToPasswordReset,
+    switchSetNewPassword,
     // openForgetPassword,
     closeModal,
     // openPasswordReset,
-    openSetNewPassword,
+    // openSetNewPassword,
     
   };
 }

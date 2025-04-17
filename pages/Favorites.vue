@@ -67,11 +67,9 @@ const navigateToProductDetail = (productId) => {
                 :src="fillHeart" class="w-6 h-6 hover:scale-[103%]"
               />
             </button>
-            <div v-if="loadproduct">
-              <Loading/>
-            </div>
+            
 
-            <button v-else @click.stop="addToCart(product._id);removeFromFavorites(product._id)">
+            <button  @click.stop="addToCart(product._id);removeFromFavorites(product._id)">
               <img
                 src="../assets/Vector (3).svg"
                 class="w-6 h-6 hover:scale-[103%]"

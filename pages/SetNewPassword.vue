@@ -5,10 +5,14 @@ import ConfirmResetPassword from '../pages/ConfirmResetPassword.vue';
 
 const emit = defineEmits(['close','switch-to-login']);
 const confirmPage = ref(false);
+const {showLogin,switchToLogin,setNewPassword }=useAuthModal()
 const closeModal = () => {
 emit('close');
+setNewPassword.value=false
 };
-
+if(showLogin){
+  setNewPassword.value=false
+}
 const schema = yup.object({
   newPassword: yup.string()
            .matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, 'Password must be at least 1 uppercase, 1 lowercase, 1 number and 1 special character')
@@ -58,10 +62,7 @@ const onSubmit = handleSubmit(async(values) => {
   confirmPage.value = true; 
 });
 
-const switchToLogin = () => {
-  confirmPage.value = false;
-  emit('switch-to-login');
-};
+
 </script>
  
 <template>
@@ -87,7 +88,7 @@ const switchToLogin = () => {
                     </div>
             
                      <Button type="submit" buttonName="Reset Password"/>
-                     <p>back to<button type="button" @click="emit('switch-to-login')" class="underline">Login</button></p>
+                     <!-- <p>back to<button type="button" @click="switchToLogin" class="underline">Login</button></p> -->
                   </form> 
         </div>
     </form>  
@@ -104,7 +105,10 @@ const switchToLogin = () => {
     </div>
 
     <div v-if="confirmPage" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <ConfirmResetPassword @close="closeModal" @switch-to-login="switchToLogin"/>
+      <ConfirmResetPassword @close="closeModal"  />
+    </div>
+    <div v-if="showLogin" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <Login  @close="closeModal" />
     </div>
  </div>
 </template>

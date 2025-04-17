@@ -3,20 +3,23 @@
  import * as yup from "yup";
  import PasswordReset from "../pages/PasswordReset.vue"
  import { useRouter, useRoute } from "vue-router";
+import Login from "./Login.vue";
 const router = useRouter();
 const route = useRoute();
 
 const emit = defineEmits(['close', 'switch-to-login']);
+const {showLogin,switchToLogin ,switchToPasswordReset}=useAuthModal()
+
 const passwordReset = ref(false); 
 
 const closeModal = () => {
 emit('close');
 };
 
-const switchToLogin = () => {
-    passwordReset.value = false;
-    emit('switch-to-login');
-};
+// const switchToLogin = () => {
+//     passwordReset.value = false;
+//     emit('switch-to-login');
+// };
 const schema = yup.object({
   email: yup.string()
         .email()
@@ -84,7 +87,7 @@ const onSubmit = handleSubmit(async (values) => {
                  </div>
                  
                <Button type="submit" buttonName="Send e-mail"/>
-                <p class="text-center md:text-left">  back to  <button type="button" @click="emit('switch-to-login')" class="underline">Login</button></p>
+                <p class="text-center md:text-left">  back to  <button type="button" @click="switchToLogin"  class="underline">Login</button></p>
         </div>
     </form>  
   
@@ -99,8 +102,12 @@ const onSubmit = handleSubmit(async (values) => {
         </div>
     </div>
 
+    
     <div v-if="passwordReset" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <PasswordReset  @close="closeModal" @switch-to-login="switchToLogin"/>
+      <PasswordReset  @close="closeModal" @switch-to-login="switchToPasswordReset"/>
+    </div>
+    <div v-if="showLogin" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <Login  @close="closeModal" @switch-to-login="switchToLogin"/>
     </div>
  </div>
 </template>

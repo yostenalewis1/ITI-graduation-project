@@ -173,17 +173,21 @@ const completeOrder = handleSubmit(async(values) => {
       },
       paymentMethod: values.paymentMethod,
     }
-  const { data, status ,message} = await useAsyncFetch("POST", "/api/v1/order",shippingAddress);
+  const { data, status ,error} = await useAsyncFetch("POST", "/api/v1/order",shippingAddress);
  
   console.log("Response data:", data);
   console.log("Status:", status);
   if (status === "success") {
       console.log("Order completed successfully, redirecting...");
-      console.log(data.session.url);
-      
-      window.location.href = data.session.url;      
+      if(values.paymentMethod==='card'){
+        window.location.href = data.session?.url;      
+      }else{
+        console.log("cash");
+        
+        router.push({path:"/confirmation"})
+      }
     } else {
-      console.error('Error creating order:', data.message);
+      console.error('Error creating order:', error);
     }
 
 });
