@@ -49,9 +49,9 @@ const offerData = [
           Bringing nature’s beauty to your doorstep with elegant and fresh floral arrangements.
         </div>
 
-        <div class="w-[80%]  md:w-[545px] py-2 md:px-32 md:py-3 bg-violet-950 rounded-2xl inline-flex justify-center items-center gap-2">
+        <NuxtLink to="/product" class="w-[80%]  md:w-[545px] py-2 md:px-32 md:py-3 bg-violet-950 rounded-2xl inline-flex justify-center items-center gap-2">
             <button class="text-center text-white text-3xl font-cairo">Start Shopping </button>
-        </div> 
+        </NuxtLink> 
     </div>
   </div>
 
@@ -73,10 +73,12 @@ const offerData = [
     Flowers speak the language of love, care, and joy. At Floral Haven, we curate exquisite floral arrangements that bring happiness to every moment. Whether you need a bouquet for a special occasion or just to brighten someone's day, we have the perfect flowers for you.
   </p>
 
+ <NuxtLink to="/product">
   <Button buttonName="Start Shopping" />
+ </NuxtLink> 
 </div>
 
-</div>
+  </div>
 
 
 
@@ -90,10 +92,10 @@ const offerData = [
     
     
     <div class="mb-[30px] flex flex-row flex-wrap items-center justify-center pt-[50px] gap-6">
-      <Cards :imgUrl="categoryImg" title="Orchid Flower" description="Orchids symbolize elegance and sophistication, adding a luxurious touch to any space." buttonName="View Collection" />
-      <Cards :imgUrl="categoryImg2" title="Peony Flower" description="Peonies represent romance and prosperity, making them perfect for gifts and special occasions." buttonName="View Collection" />
-      <Cards :imgUrl="categoryImg3" title="Tulip Flower " description="Tulips are a symbol of love and hope, available in vibrant colors to suit all tastes." buttonName="View Collection" />
-      <Cards :imgUrl="categoryImg4" title="Lily Flower" description="Lilies symbolize purity and beauty, bringing grace and charm to any setting. " buttonName="View Collection" />
+      <Cards :imgUrl="categoryImg" title="Orchids" description="Orchids symbolize elegance and sophistication, adding a luxurious touch to any space." buttonName="View Collection" />
+      <Cards :imgUrl="categoryImg2" title="Daisies" description="Daisies represent romance and prosperity, making them perfect for gifts and special occasions." buttonName="View Collection" />
+      <Cards :imgUrl="categoryImg3" title="Tulips" description="Tulips are a symbol of love and hope, available in vibrant colors to suit all tastes." buttonName="View Collection" />
+      <Cards :imgUrl="categoryImg4" title="Lilies" description="Lilies symbolize purity and beauty, bringing grace and charm to any setting. " buttonName="View Collection" />
 
     </div>
 

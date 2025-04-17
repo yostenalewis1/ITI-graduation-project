@@ -17,9 +17,9 @@ defineProps({
     <div class="h-1/2 flex flex-col justify-between p-4">
       <h1 class="text-2xl font-bold text-violet-950 font-cairo">{{ title }}</h1>
       <p class="text-gray-600">{{ description }}</p>
-      <button class="border border-violet-950 text-violet-950 py-2 px-4 rounded-lg hover:bg-violet-950 transition-all hover:text-white">
+      <nuxt-link :to="{path : '/category' , query:{filter: title}}" class="border border-violet-950 text-violet-950 py-2 px-4 rounded-lg hover:bg-violet-950 transition-all hover:text-white text-center">
            {{ buttonName }}
-      </button>
+      </nuxt-link>
 
     </div>
 </div>
